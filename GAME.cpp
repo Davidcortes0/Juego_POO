@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -13,15 +12,15 @@ using namespace std;
 //DADOS
 int dado(int cx,int turno,int Pcx){
 
-srand(time(NULL));
-
 if(turno<3){
-cx=(rand()%64)+1;
+cx=rand()%64;
+cx=cx+1;
 return cx;
 }
 
 if(turno>2){
-Pcx=(rand()%8)+1;
+Pcx=rand()%8;
+Pcx=Pcx+1;
 return Pcx;
 }
  }
@@ -57,19 +56,10 @@ return 0;
 }
 
 //POSICION
-int mismapos(int cx, int ck){//Devuelve bool
-
-if (cx==ck){
-    return true;
-}
-else{
-    return false;
-}
-}
-
 int posicion(int cx,int Pcx){//Devuelve valor de la nueva posicion en el tablero
 
 int x=0;
+
 
 switch(Pcx){
 
@@ -91,100 +81,87 @@ case 8: x=cx-17;
 break;
 }
 
-return x;
+if(x<64){
+    if(0<x){
+        return x;
+    }
+    else{
+        return 1000;
+    }
+}
+else{
+    return 1000;
+}
 }
 
 int validapos(int cx,int Pcx,int x){//Devuelve cx con su nueva posicion o si no es valido false
 
-int statex=0,statey=0;
-int resultx=cx%8;
-double resulty=cx/8;
-
-
-
-switch(Pcx){// Valida posicion en X
-
-if(resultx==0){// Porque si resultx es un múltiplo de 8, resultx % 8 = 0 y result % 8 = 8
-    resultx=8;
-    }
-
-case 1: resultx=resultx+1;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 2: resultx=resultx+2;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 3: resultx=resultx+2;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 4: resultx=resultx+1;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 5: resultx=resultx-1;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 6: resultx=resultx-2;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 7: resultx=resultx-2;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
-
-case 8: resultx=resultx-1;
-        if(1<=resultx<=8){
-            statex=1;
-        };break;
+bool valida;
+int z=cx;
+while((z%8)!=0){
+    z=z+1;
 }
 
+valida=false;
+switch(Pcx){
 
-switch(Pcx){// Valida posicion en Y
-
-    case 1: if(0<(resulty)-2<=8){
-                statey=1;
-            }break;
-    case 2: if(0<(resulty)-1<=8){
-                statey=1;
-            }break;
-    case 3: if(0<(resulty)+1<=8){
-                statey=1;
-            }break;
-    case 4: if(0<(resulty)+2<=8){
-                statey=1;
-            }break;
-    case 5: if(0<(resulty)+2<=8){
-                statey=1;
-            }break;
-    case 6: if(0<(resulty)+1<=8){
-                statey=1;
-            }break;
-    case 7: if(0<(resulty)-1<=8){
-                statey=1;
-            }break;
-    case 8: if(0<(resulty)-2<=8){
-                statey=1;
-            }break;
+case 1: if((z-24)<x){
+            if(x<=(z-16)){
+                valida=true;
+            }
+        }
+break;
+case 2: if((z-16)<x){
+            if(x<=(z-8)){
+                valida=true;
+            }
+        }
+break;
+case 3: if(z<x){
+            if(x<=(z+8)){
+                valida=true;
+            }
+        }
+break;
+case 4: if((z+8)<x){
+            if(x<=(z+16)){
+                valida=true;
+            }
+        }
+break;
+case 8: if((z-24)<x){
+            if(x<=(z-16)){
+                valida=true;
+            }
+        }
+break;
+case 7: if((z-16)<x){
+            if(x<=(z-8)){
+                valida=true;
+            }
+        }
+break;
+case 6: if(z<x){
+            if(x<=(z+8)){
+                valida=true;
+            }
+        }
+break;
+case 5: if((z+8)<x){
+            if(x<=(z+16)){
+                valida=true;
+            }
+        }
+break;
 }
 
-if(statex && statey){
-    return 1;
-    cout<<"yes"<<endl;
-}
-else{
+if (valida==false){
     return 0;
 }
+else{
+    return 1;
+}
+
 }
 
  //INTERACCION CON EL USUARIO
@@ -193,12 +170,10 @@ else{
     cout<<endl;
     Tecla = char(0);
     while( Tecla != char(72) ){
+        cout<<"Oprima la flecha arriba"<<endl;
         Tecla = getch();
         if( Tecla == char(72) )
           break;
-        else{
-            cout<<"Oprima la flecha arriba"<<endl;
-        }
     }
 
     return 0; // ANSI C/C++
@@ -224,7 +199,7 @@ cout<<endl<<"AHORA LANCE EL DADO QUE DARA LA POSICION INCIAL DEL CABALLERO 2 EN 
 pass();
 turno=turno+1;
 c2=dado(c2,turno,Pc2);
-if(mismapos(c1,c2)==true){
+if(c1==c2){
     c2++;
 }
 cout<<endl<<"LA POSICION DEL CABALLERO 2 ES "<<c2<<endl;
@@ -240,25 +215,33 @@ do{//Juego
 
     case 1:
         cout<<endl<<"TURNO DEL CABALLERO 1"<<endl;
-
+        srand(time(NULL));
         while(flag==false){
             pass();
             Pc1=dado(c1,turno,Pc1);
-            Valida=validapos(c1,Pc1,x);
-            if (Valida==1){
-                valida=mismapos(c1,c2);
-                if (valida==false){
-                    x=posicion(c1,Pc1);
-
-                    c1=x;
-                    flag=true;
-                    cout<<"Se movio a "<<c1<<endl;
-                    cout<<"MOVE: "<<Pc1<<endl;
-
+            x=posicion(c1,Pc1);
+            if(x<65){
+                Valida=validapos(c1,Pc1,x);
+                if (Valida==1){
+                    if(x!=c2){
+                            c1=x;
+                            flag=true;
+                            cout<<"Se movio a "<<c1<<endl;
+                            cout<<"Dado: "<<Pc1<<endl;
+                        }
+                    else{
+                            if(Pc1<8){
+                                cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc1<<endl;
+                                Pc1=Pc1+1;
+                            }
+                            if(Pc1==8){
+                                Pc1=1;
+                            }
+                        }
                 }
                 else{
                     if(Pc1<8){
-                        cout<<"EL MOVIMIENTO NO ES POSIBLE"<<endl;
+                        cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc1<<endl;
                         Pc1=Pc1+1;
                     }
                     if(Pc1==8){
@@ -266,38 +249,49 @@ do{//Juego
                     }
                 }
             }
-
             else{
-                 if(Pc1<8){
-                    cout<<"EL MOVIMIENTO NO ES POSIBLE"<<endl;
+                if(Pc1<8){
+                    cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc1<<endl;
                     Pc1=Pc1+1;
-                    }
+                }
                 if(Pc1==8){
                     Pc1=1;
                 }
             }
         }
-
         flag=false;
-    break;
+        break;
 
     case 0:
         cout<<endl<<"TURNO DEL CABALLERO 2"<<endl;
+        srand(time(NULL));
         while(flag==false){
             pass();
             Pc2=dado(c2,turno,Pc2);
-            Valida=validapos(c2,Pc2,x);
-            if (Valida==1){
-                valida=mismapos(c1,c2);
-                if (valida==false){
-                    x=posicion(c2,Pc2);
-                    c2=x;
-                    flag=true;
-                    cout<<"Se movio a "<<c2<<endl;
+            x=posicion(c2,Pc2);
+            if(x<65){
+                Valida=validapos(c2,Pc2,x);
+                if (Valida==1){
+                    if(x!=c1){
+                        c2=x;
+                        flag=true;
+                        cout<<"Se movio a "<<c2<<endl;
+                        cout<<"Dado: "<<Pc2<<endl;
+                    }
+                    else{
+                        if(Pc2<8){
+                        cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc2<<endl;
+                        Pc2=Pc2+1;
+                        }
+                        if(Pc2==8){
+                            Pc2=1;
+                        }
+                    }
                 }
+
                 else{
                     if(Pc2<8){
-                        cout<<"EL MOVIMIENTO NO ES POSIBLE"<<endl;
+                        cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc2<<endl;
                         Pc2=Pc2+1;
                     }
                     if(Pc2==8){
@@ -305,34 +299,25 @@ do{//Juego
                     }
                 }
             }
-
             else{
                 if(Pc2<8){
-                    cout<<"LEL MOVIMIENTO NO ES POSIBLE"<<endl;
+                    cout<<"EL MOVIMIENTO NO ES POSIBLE"<<Pc2<<endl;
                     Pc2=Pc2+1;
-                    }
+                }
                 if(Pc2==8){
                     Pc2=1;
-                    }
+                }
             }
         }
-
         flag=false;
-    break;
-
+        break;
     }
 
-table();
+//table();
 
 }
 while(win=true);
 
-
-
-
-
-
-
-
-    return 0;
+   return 0;
 }
+
