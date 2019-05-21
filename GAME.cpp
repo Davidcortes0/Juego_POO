@@ -375,8 +375,17 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                             Pc1=mov_inv(Pc1);
                         }
                     }
-                    else{                           //Si la nueva posible posición es IGUAL al de la posición actual del jugador 2, continua con el código
-                        Pc1=mov_inv(Pc1);
+                    else{                               //Si el jugador 1 cae en la posicion del jugador 2
+                        tablero[c1-1]='X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                        c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
+                        tablero[c1-1]='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
+                        flag=true;                      //termina el turno
+                        jugadasG[jugadaG-1]=Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
+                        //Se imprime lo que paso en el tablero de forma escrita
+                        cout<<"Se movió a la posición de DIETRICH"<<c1<<endl;
+                        cout<<"Dado: "<<Pc1<<endl;
+                        win=true;                       //Indica que alguien gano
+                        winner=1;                       //Indica que el jugador 1 gano
                     }
                 }
                 else{                           //Si la nueva posición no es valida, vuelve a tirar el dado
@@ -423,8 +432,17 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                             Pc2=mov_inv(Pc2);
                         }
                     }
-                    else{                           //Si la nueva posible posición es IGUAL al de la posición actual del jugador 1, continua con el código
-                        Pc2=mov_inv(Pc2);
+                    else{                           //Si el jugador 2 cae en la posicion del jugador 1
+                        tablero[c2-1]='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                        c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
+                        tablero[c2-1]='D';
+                        flag=true;                      //termina el turno
+                        jugadasD[jugadaD-1]=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
+                        //Se imprime lo que paso en el tablero de forma escrita
+                        cout<<"Se movió a la posición de GAWAIN"<<c2<<endl;
+                        cout<<"Dado: "<<Pc2<<endl;
+                        win=true;                       //Indica que alguien gano
+                        winner=2;                       //Indica que el jugador 2 gano
                     }
                 }
 
