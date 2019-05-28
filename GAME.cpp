@@ -5,7 +5,7 @@
 #include <ctime>
 //LIBRERIA PARA INTERACTUAR CON EL USUARIO
 #include <conio.h>
-//LIBRERIA PARA AGRGAR CARACTERES DE IMPRESION EN CONSOLA
+//LIBRERIA PARA AGREGAR CARACTERES DE IMPRESION EN CONSOLA
 #include <wchar.h>
 
 using namespace std;
@@ -113,7 +113,7 @@ int z=cx;
 //z: Nos dice la fila en la que esta la posición actual
 
 
-//El siguiente ciclo toma la posición actual y convierte a z en el múltiplo de 8 que hay en la fila en la que se encuentra.
+//El siguiente ciclo toma la posición actual y convierte a z en el múltiplo de 8 que hay en la fila en la que se encuentra dicha posición.
 while((z%8)!=0){
     z=z+1;
 }
