@@ -113,7 +113,7 @@ int z=cx;
 //z: Nos dice la fila en la que esta la posición actual
 
 
-//El siguiente ciclo toma la posición actual y convierte a z en el múltiplo de 8 que hay en la fila en la que se encuentra dicha posición.
+//El siguiente ciclo toma la posición actual y convierte a z en el múltiplo de 8 que hay en la fila en la que se encuentra.
 while((z%8)!=0){
     z=z+1;
 }
@@ -251,8 +251,11 @@ srand(time(NULL));      //SEMILLA PARA GENERACIÍON DE NUMEROS ALEATORIOS
 int c1=0,c2=0,Pc1=0,Pc2=0,turno=0,x,i,Valida,contador,winner,jugadaG=0,jugadaD=0;
 bool win=false,flag=false;
 int jugadasG[32];
+int *p_jugadasG[32];
 int jugadasD[32];
+int *p_jugadasD[32];
 char tablero[64];
+char *p_tablero[64];
 
 //Variables:
 //c1: Número que da la posición actual del jugador 1 (GAWAIN).
@@ -283,6 +286,13 @@ char tablero[64];
 //Este ciclo toma el vector tablero y a cada espacio que tiene le asigna un carácter ' '.
 for(i=0;i<64;i++){
     tablero[i]=' ';
+    p_tablero[i]=&tablero[i];
+}
+for(i=0;i<32;i++){
+    p_jugadasD[i]=&jugadasD[i];
+}
+for(i=0;i<32;i++){
+    p_jugadasG[i]=&jugadasG[i];
 }
 
 
@@ -291,23 +301,23 @@ for(i=0;i<64;i++){
 //3.INTRODUCCION AL JUEGO
 
 //Se explica el funcionamiento del juego
-cout<<"BIENVENDIO A BATALLA POR LA PRINCESA"<<endl;
+cout<<"BIENVENIDO A BATALLA POR LA PRINCESA"<<endl;
 cout<<endl<<"PARA AVANZAR EN EL JUEGO OPRIMA LA FLECHA ARRIBA"<<endl;
 cout<<"CUANDO UN MOVIMIENTO NO SEA POSIBLE SE LE AVISARÁ JUNTO CON EL NUMERO DEL DADO QUE SACÓ"<<endl<<endl<<endl;
 
 //Primer turno del jugador 1
-cout<<endl<<"A CONTINUACIÓN LANCE EL DADO QUE DARA LA POSICIÓN INCIAL DEL CABALLERO GAWAIN EN EL TABLERO"<<endl;
+cout<<endl<<"A CONTINUACIÓN LANCE EL DADO QUE DARÁ LA POSICIÓN INICIAL DEL CABALLERO GAWAIN EN EL TABLERO"<<endl;
 pass();                                 //Función que para el juego hasta que se oprima la flecha arriba
 turno=turno+1;                         //Suma 1 a la variable turno
 cout<<"Turno: "<<turno<<endl;                      //Imprime la variable turno (TURNO 1)
 c1=dado(c1,turno,Pc1);                  //toma un numero de1 1 al 64 mediante la función dado() y la asigna al jugador 1
 cout<<"LA POSICIÓN DE GAWAIN ES "<<c1; //Imprime la posición del jugador 1
 cout<<endl<<endl<<endl;
-tablero[c1-1]='G';                      //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
-table(tablero);                         //Imprime el tablero actualizado
+*p_tablero[c1-1]='G';                      //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
+table(*p_tablero);                         //Imprime el tablero actualizado
 
 //Primer turno del jugador 2
-cout<<endl<<"AHORA LANCE EL DADO QUE DARA LA POSICIÓN INCIAL DEL CABALLERO DIETRICH EN EL TABLERO"<<endl;
+cout<<endl<<"AHORA LANCE EL DADO QUE DARÁ LA POSICIÓN INICIAL DEL CABALLERO DIETRICH EN EL TABLERO"<<endl;
 pass();                                 //Función que para el juego hasta que se oprima la flecha arriba
 turno=turno+1;                          //Suma 1 a la variable turno
 cout<<"Turno: "<<turno<<endl;                      //Imprime la variable turno (TURNO 2)
@@ -318,8 +328,8 @@ if(c1==c2){
     c2++;
 }
 cout<<"LA POSICIÓN DE DIETRICH ES "<<c2<<endl<<endl<<endl<<endl<<endl;//Imprime la posición del jugador 1
-tablero[c2-1]='D';                      //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
-table(tablero);                         //Imprime el tablero actualizado
+*p_tablero[c2-1]='D';                      //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
+table(*p_tablero);                         //Imprime el tablero actualizado
 
 
 //SE EXPLICA COMO FUNCIONARA EL JUEGO A PARTIR DE AHORA
@@ -351,7 +361,7 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
         while(flag==false){             //Ciclo que se repite hasta que el jugador termine su turno, llámese ciclo de turno
             pass();                     //Función que para el juego hasta que se oprima la flecha arriba
             contador++;                 //Suma 1 al contador
-            if(contador==8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
+            if(contador>8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
                 win=true;                   //Indica que alguien gano
                 flag=true;                  //termina el turno
                 winner=2;                   //Indica que el jugador 2 gano
@@ -361,12 +371,12 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                 Valida=validapos(c1,Pc1,x); //Valida la nueva posible posición a ver si se puede hacer
                 if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                     if(x!=c2){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 2, continua con el código
-                        if(tablero[x-1]==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                            tablero[c1-1]='X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                        if(*p_tablero[x-1]==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
+                            *p_tablero[c1-1]='X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                             c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
-                            tablero[c1-1]='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
+                            *p_tablero[c1-1]='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                             flag=true;                      //termina el turno
-                            jugadasG[jugadaG-1]=Pc1;           //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
+                            *p_jugadasG[jugadaG-1]=Pc1;           //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
                             //Se imprime lo que paso en el tablero de forma escrita
                             cout<<"Se movió a "<<c1<<endl;
                             cout<<"Dado: "<<Pc1<<endl;
@@ -380,7 +390,7 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                         c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                         tablero[c1-1]='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                         flag=true;                      //termina el turno
-                        jugadasG[jugadaG-1]=Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
+                        *p_jugadasG[jugadaG-1]=Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
                         //Se imprime lo que paso en el tablero de forma escrita
                         cout<<"Se movió a la posición de DIETRICH"<<c1<<endl;
                         cout<<"Dado: "<<Pc1<<endl;
@@ -401,14 +411,14 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
 
     //TURNO DEL JUGADOR 2
     case 0://Si turno modulo dos es 0, ejecuta el siguiente código
-        cout<<endl<<"TURNO DEL DIETRICH"<<endl;
+        cout<<endl<<"TURNO DEL CABALLERO DIETRICH"<<endl;
         srand(time(NULL));              //Adquiere un número del 1 al 8 (Se lanza el dado)
         Pc2=dado(c2,turno,Pc2);         //Ciclo que se repite hasta que el jugador termine su turno, llámese ciclo de turno
         jugadaD++;
         while(flag==false){
             pass();                     //Función que para el juego hasta que se oprima la flecha arriba
             contador++;                 //Suma 1 al contador
-            if(contador==8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
+            if(contador>8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
                 win=true;                   //Indica que alguien gano
                 flag=true;                  //termina el turno
                 winner=1;                   //Indica que el jugador 1 gano
@@ -418,12 +428,12 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                 Valida=validapos(c2,Pc2,x); //Valida la nueva posible posición a ver si se puede hacer
                 if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                     if(x!=c1){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 1, continua con el código
-                        if(tablero[x-1]==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                            tablero[c2-1]='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                        if(*p_tablero[x-1]==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
+                            *p_tablero[c2-1]='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                             c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
-                            tablero[c2-1]='D';
+                            *p_tablero[c2-1]='D';
                             flag=true;                      //termina el turno
-                            jugadasD[jugadaD-1]=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
+                            *p_jugadasD[jugadaD-1]=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                             //Se imprime lo que paso en el tablero de forma escrita
                             cout<<"Se movió a "<<c2<<endl;
                             cout<<"Dado: "<<Pc2<<endl;
@@ -433,11 +443,11 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
                         }
                     }
                     else{                           //Si el jugador 2 cae en la posicion del jugador 1
-                        tablero[c2-1]='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                        *p_tablero[c2-1]='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                         c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
-                        tablero[c2-1]='D';
+                        *p_tablero[c2-1]='D';
                         flag=true;                      //termina el turno
-                        jugadasD[jugadaD-1]=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
+                        *p_jugadasD[jugadaD-1]=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                         //Se imprime lo que paso en el tablero de forma escrita
                         cout<<"Se movió a la posición de GAWAIN"<<c2<<endl;
                         cout<<"Dado: "<<Pc2<<endl;
@@ -457,13 +467,13 @@ while(win==false){                      // Este ciclo se repite hasta que uno de
         break;
     }
 flag=false;                             //Asigna false a la variable flat para que el turno se pueda ejecutar correctamente el código del siguiente jugador
-table(tablero);                         //Imprime el tablero
+table(*p_tablero);                         //Imprime el tablero
 
 //Imprime el vector que contiene las jugadas de Gawain de forma lineal y separando cada número por comas
 cout<<"Jugadas Gawain: ";
     for(i=0;i<=jugadaG;i++){
-        if ((jugadasG[i]<9) && (0<jugadasG[i])) {   //Valida que el numero del dado almacenado en el vesctor jugadasG este entre 0 y 9
-            cout<<jugadasG[i]<<", ";
+        if ((*p_jugadasG[i]<9) && (0<*p_jugadasG[i])) {   //Valida que el numero del dado almacenado en el vesctor jugadasG este entre 0 y 9
+            cout<<*p_jugadasG[i]<<", ";
         }
     }
     cout<<endl;
@@ -471,8 +481,8 @@ cout<<"Jugadas Gawain: ";
 //Imprime el vector que contiene las jugadas de Dietrich forma lineal y separando cada número por comas
 cout<<"Jugadas Dietrich: ";
     for(i=0;i<jugadaD;i++){
-        if ((jugadasD[i]<9) && (0<jugadasD[i])) {   //Valida que el numero del dado almacenado en el vesctor jugadasD este entre 0 y 9
-            cout<<jugadasD[i]<<", ";
+        if ((*p_jugadasD[i]<9) && (0<*p_jugadasD[i])) {   //Valida que el numero del dado almacenado en el vesctor jugadasD este entre 0 y 9
+            cout<<*p_jugadasD[i]<<", ";
         }
     }
     cout<<endl;
