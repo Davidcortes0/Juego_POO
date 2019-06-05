@@ -255,16 +255,28 @@ int jugadasG[32];
 int *p_jugadasG;
 p_jugadasG= new int[32];
 p_jugadasG=&jugadasG[0];
+if(p_jugadasG==NULL){
+    cout<< "No hay memoria disponible"<<endl;
+    exit(2);
+}
 
 int jugadasD[32];
 int *p_jugadasD;
 p_jugadasD= new int[32];
 p_jugadasD=&jugadasD[0];
+if(p_jugadasD==NULL){
+    cout<< "No hay memoria disponible"<<endl;
+    exit(2);
+}
 
 char tablero[64];
 char *p_tablero;
 p_tablero= new char[64];
 p_tablero=&tablero[0];
+if(p_tablero==NULL){
+    cout<< "No hay memoria disponible"<<endl;
+    exit(2);
+}
 
 //Variables:
 //c1: Número que da la posición actual del jugador 1 (GAWAIN).
@@ -512,5 +524,8 @@ if (winner==2){
 }
 pass();//Función que para el juego hasta que se oprima la flecha arriba
 
+delete(p_jugadasD);
+delete(p_jugadasG);
+delete(p_tablero);
    return 0;
 }
