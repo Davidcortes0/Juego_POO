@@ -221,6 +221,7 @@ return Pcx;     //Devuelve el nuevo numero del dado
 
 
 //INTERACCION CON EL USUARIO
+//Funcion Pass: Uada para que el usuario avance en el juego
 int pass(){
 
 //Crea una variable "tecla" y le asigna el valor de una tecla del teclado en codigo ASCII
@@ -237,6 +238,13 @@ while( Tecla != char(72) ){
     }
 
     return 0;
+ }
+
+//Funcion clean: Usada para limpiar la pantalla
+int clean(){
+ pass();
+ system("cls");
+ return 0;
  }
 
 
@@ -308,15 +316,6 @@ if(p_tablero==NULL){
 for(i=0;i<64;i++){
     *(p_tablero +i)=' ';
 }
-/*
-for(i=0;i<32;i++){
-    p_jugadasD[i]=&jugadasD[i];
-}
-for(i=0;i<32;i++){
-    p_jugadasG[i]=&jugadasG[i];
-}
-*/
-
 
 
 
@@ -338,6 +337,9 @@ cout<<endl<<endl<<endl;
 *(p_tablero + (c1 -1))='G';                      //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
 table(p_tablero);                         //Imprime el tablero actualizado
 
+clean();                                //Limpia pantalla
+
+
 //Primer turno del jugador 2
 cout<<endl<<"AHORA LANCE EL DADO QUE DARÁ LA POSICIÓN INICIAL DEL CABALLERO DIETRICH EN EL TABLERO"<<endl;
 pass();                                 //Función que para el juego hasta que se oprima la flecha arriba
@@ -353,18 +355,19 @@ cout<<"LA POSICIÓN DE DIETRICH ES "<<c2<<endl<<endl<<endl<<endl<<endl;//Imprime
 *(p_tablero + (c2-1))='D';                      //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
 table(p_tablero);                         //Imprime el tablero actualizado
 
+clean();                                  //Limpia pantalla
+
 
 //SE EXPLICA COMO FUNCIONARA EL JUEGO A PARTIR DE AHORA
 cout<<endl<<"A PARTIR DE ESTE MOMENTO SE JUGARÁ CON UN DADO DE OCHO CARAS QUE DICTARÁ LA SIGUENTE POSICIÓN DEL JUGADOR SEGUN LOS MOVIMIENTOS DEL CABALLO EN EL AJEDREZ"<<endl<<endl<<endl;
-pass();                                 //Imprime el tablero actualizado
+
 
 
 //4. JUEGO
 while(win==false){                      // Este ciclo se repite hasta que uno de los dos jugadores gane y contiene lo que se hara durante el turno 3 hasta que un jugador se queda sin movimientos
+    clean();                                //Limpia pantalla
     turno=turno+1;                      //Suma 1 a la variable turno
-    cout<<endl;
     contador=0;                         //Asigna el valor cero al contador de movimientos no validos
-    cout<<endl<<endl;
     cout<<endl<<"Turno: "<<turno<<endl; //Imprime el turno actual
 
 
@@ -528,4 +531,6 @@ delete(p_jugadasD);
 delete(p_jugadasG);
 delete(p_tablero);
    return 0;
+
 }
+
