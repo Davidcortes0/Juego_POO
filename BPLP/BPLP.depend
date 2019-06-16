@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1560649751 source:c:\users\dcort\desktop\c++\bplp\main.cpp
+	<iostream>
+	<cstdlib>
+	<ctime>
+	<conio.h>
+	<wchar.h>
+	<string.h>
+	<allegro.h>
+
