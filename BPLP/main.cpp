@@ -136,8 +136,7 @@ int print_table(int c1, int c2,int turno,char *p_tablero){
     int Gx = (50*x)-40;
     int Gy = (50*y)+10;
 
-    //rectfill(screen,Gx,Gy,Gx+50,Gy-50,pallete_color[10]);
-    blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
+
 
     //Dietrich
     int t = (c2%8);
@@ -150,8 +149,18 @@ int print_table(int c1, int c2,int turno,char *p_tablero){
     int Dx = (50*t)-40;
     int Dy = (50*r)+10;
 
-    //rectfill(screen,Dx,Dy,Dx+50,Dy-50,pallete_color[1]);
-    blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
+
+
+
+    if((turno%2)==1){
+            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
+            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);}
+
+    if((turno%2)==0){
+            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
+            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);}
+
+
 
 
     int i=0,j,k,l,Ix,Iy;
