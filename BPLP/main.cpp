@@ -64,27 +64,37 @@ int table(char *p_tablero){
 }
 
 
-int print_table(int c1, int c2,int turno,char *p_tablero){
+int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
 
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
+    BITMAP *howtoplay = load_bitmap("como_jugar.bmp",NULL);
 
     textout(screen,font,"BATALLA POR LA PRINCESA",500,10,pallete_color[15]);
 
-    textout(screen,font,"TURNO ",430,80,pallete_color[15]);
-    textout(screen,font,"JUEGA ",430,110,pallete_color[15]);
-    textout(screen,font,"DADO: ",430,140,pallete_color[15]);
+    blit(howtoplay,screen,0,0,420,30,387,89);
+
+    textout(screen,font,"PRUEBA",425,130,pallete_color[15]);
+
+
+
+    rectfill(screen,0,401,200,530,pallete_color[16]);
+
+    textout(screen,font,"TURNO ",20,455,pallete_color[15]);
+    textout(screen,font,"JUEGA ",20,430,pallete_color[15]);
+    textout(screen,font,"DADO: ",210,430,pallete_color[15]);
 
     if ((turno%2)==0){
-    rectfill(screen,499,110,600,130,pallete_color[16]);
-    textout(screen,font," GAWAIN",470,110,pallete_color[10]);
+    textout(screen,font," GAWAIN",60,430,pallete_color[10]);
+    textout(screen,font,"JUGADAS GAWAIN:",20,480,pallete_color[10]);
     }
 
     if ((turno%2)==1){
-    textout(screen,font," DIETRICH",470,110,pallete_color[1]);
+    textout(screen,font," DIETRICH",60,430,pallete_color[1]);
+    textout(screen,font,"JUGADAS DIETRICH:",20,480,pallete_color[1]);
     }
 
-    textout(screen,font,"JUGADAS GAWAIN:",430,170,pallete_color[10]);
+
 
     rectfill(screen,10,10,410,410,pallete_color[20]);
 
@@ -529,7 +539,7 @@ int main() {
         *(p_tablero + (c2-1))='D';                      //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
         table(p_tablero);                         //Imprime el tablero actualizado
 
-        print_table(c1,c2,turno,p_tablero);
+        print_table(c1,c2,turno,p_tablero,winner);
 
         //4. JUEGO
         while(win==false){                      // Este ciclo se repite hasta que uno de los dos jugadores gane y contiene lo que se hara durante el turno 3 hasta que un jugador se queda sin movimientos
@@ -552,15 +562,15 @@ int main() {
                 Pc1=dado(c1,turno,Pc1);         //Adquiere un número del 1 al 8 (Se lanza el dado)
                 jugadaG++;
                 while(flag==false){             //Ciclo que se repite hasta que el jugador termine su turno, llámese ciclo de turno
-                    contador++;                 //Suma 1 al contador
-                    if(contador>8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
-                        win=true;                   //Indica que alguien gano
-                        flag=true;                  //termina el turno
-                        winner=2;                   //Indica que el jugador 2 gano
+                    contador++;                     //Suma 1 al contador
+                    if(contador>8){                 //Si el contador suma 8 errores ejecuta las siguientes tres líneas
+                        win=true;                       //Indica que alguien gano
+                        flag=true;                      //termina el turno
+                        winner=2;                       //Indica que el jugador 2 gano
                     }
-                    x=posicion(c1,Pc1);         //Haya la posible nueva posición del jugador 1
-                    if(x<65){                   //Si la posible nueva posición es menor a 65 continua con el código
-                        Valida=validapos(c1,Pc1,x); //Valida la nueva posible posición a ver si se puede hacer
+                    x=posicion(c1,Pc1);             //Haya la posible nueva posición del jugador 1
+                    if(x<65){                       //Si la posible nueva posición es menor a 65 continua con el código
+                        Valida=validapos(c1,Pc1,x);     //Valida la nueva posible posición a ver si se puede hacer
                         if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                             if(x!=c2){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 2, continua con el código
                                 if(*(p_tablero + (x-1))==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
@@ -663,7 +673,7 @@ int main() {
             }
             flag=false;                             //Asigna false a la variable flat para que el turno se pueda ejecutar correctamente el código del siguiente jugador
             table(p_tablero);                         //Imprime el tablero
-            print_table(c1,c2,turno,p_tablero);
+            print_table(c1,c2,turno,p_tablero,winner);
 
             //Imprime el vector que contiene las jugadas de Gawain de forma lineal y separando cada número por comas
             cout<<"Jugadas Gawain: ";
@@ -685,7 +695,7 @@ int main() {
             }
 
 
-        print_table(c1,c2,turno,p_tablero);
+        print_table(c1,c2,turno,p_tablero,winner);
 
         //5. GANADOR:
         cout<<endl<<endl<<endl;
