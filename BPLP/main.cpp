@@ -41,27 +41,56 @@ int dado(int cx,int turno,int Pcx){
 }
 
 
+void print_dado(int Pc1,int Pc2,int turno){
 
+    int Pcx;
 
-//TABLERO
-//Función table: Despliega el tablero en pantalla
-//Parámetros(Vector tablero)
-int table(char *p_tablero){
-
-    int i=1,j=1,k=0;
-
-    //i y j son variables de ayuda para los ciclos for
-    //k es el índice que recorre el vector
-
-    //Imprime el tablero
-    for(i=1;i<9;i++){
-        for(j=1;j<9;j++){
-            cout<<'['<<*(p_tablero + k)<<']';
-            k++;
-        }
-        cout<<endl;
+    if ((turno%2)==1){
+        Pcx = Pc1;
     }
+    else if ((turno%2)==0){
+        Pcx = Pc2;
+    }
+
+
+    BITMAP *dado1 = load_bitmap("dado1.bmp",NULL);
+    BITMAP *dado2 = load_bitmap("dado2.bmp",NULL);
+    BITMAP *dado3 = load_bitmap("dado3.bmp",NULL);
+    BITMAP *dado4 = load_bitmap("dado4.bmp",NULL);
+    BITMAP *dado5 = load_bitmap("dado5.bmp",NULL);
+    BITMAP *dado6 = load_bitmap("dado6.bmp",NULL);
+    BITMAP *dado7 = load_bitmap("dado7.bmp",NULL);
+    BITMAP *dado8 = load_bitmap("dado8.bmp",NULL);
+
+    switch(Pcx){
+
+        case 1: blit(dado1,screen,0,0,273,444,72,72);
+        break;
+
+        case 2: blit(dado2,screen,0,0,273,444,72,72);
+        break;
+
+        case 3: blit(dado3,screen,0,0,273,444,72,72);
+        break;
+
+        case 4: blit(dado4,screen,0,0,273,444,72,72);
+        break;
+
+        case 5: blit(dado5,screen,0,0,273,444,72,72);
+        break;
+
+        case 6: blit(dado6,screen,0,0,273,444,72,72);
+        break;
+
+        case 7: blit(dado7,screen,0,0,273,444,72,72);
+        break;
+
+        case 8: blit(dado8,screen,0,0,273,444,72,72);
+        break;
+    }
+
 }
+
 
 
 int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
@@ -69,32 +98,48 @@ int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
     BITMAP *howtoplay = load_bitmap("como_jugar.bmp",NULL);
+    BITMAP *guia = load_bitmap("guia.bmp",NULL);
 
-    textout(screen,font,"BATALLA POR LA PRINCESA",500,10,pallete_color[15]);
+    blit(howtoplay,screen,0,0,425,0,387,89);
 
-    blit(howtoplay,screen,0,0,420,30,387,89);
+    textout(screen,font,"1. Para lanzar el dado y terminar el turno ",430,80,pallete_color[15]);
+    textout(screen,font,"presione la flecha ariba.",453,90,pallete_color[15]);
 
-    textout(screen,font,"PRUEBA",425,130,pallete_color[15]);
+    textout(screen,font,"2. Cuando un caballero se mueve, la casilla ",430,110,pallete_color[15]);
+    textout(screen,font,"en la que estaba queda tachada y no puede ",453,120,pallete_color[15]);
+    textout(screen,font,"volver a usarse",453,130,pallete_color[15]);
 
+    textout(screen,font,"3. El caballero se movera segun el numero ",430,150,pallete_color[15]);
+    textout(screen,font,"del dado que le salga de la siguiente ",453,160,pallete_color[15]);
+    textout(screen,font,"forma:",453,170,pallete_color[15]);
 
+    blit(guia,screen,0,0,485,185,251,253);
 
-    rectfill(screen,0,401,200,530,pallete_color[16]);
+    textout(screen,font,"4. SE GANA SI SE CUMPLE ALGUNA DE ESTAS ",430,450,pallete_color[15]);
+    textout(screen,font,"CONDICIONES: ",453,461,pallete_color[15]);
+    textout(screen,font,"- El jugador contrario no debe poder moverse ",430,480,pallete_color[15]);
+    textout(screen,font,"a otra casilla.",453,490,pallete_color[15]);
+    textout(screen,font,"- Si al lanzar el dado se cae en la posicion ",430,500,pallete_color[15]);
+    textout(screen,font,"del jugador contrario, eliminandolo.",453,510,pallete_color[15]);
+
+    line(screen,420,0,420,550,pallete_color[15]);
+    line(screen,421,0,421,550,pallete_color[15]);
+    line(screen,422,0,422,550,pallete_color[15]);
+
+    rectfill(screen,0,429,200,530,pallete_color[16]);
 
     textout(screen,font,"TURNO ",20,455,pallete_color[15]);
     textout(screen,font,"JUEGA ",20,430,pallete_color[15]);
-    textout(screen,font,"DADO: ",210,430,pallete_color[15]);
 
     if ((turno%2)==0){
-    textout(screen,font," GAWAIN",60,430,pallete_color[10]);
-    textout(screen,font,"JUGADAS GAWAIN:",20,480,pallete_color[10]);
+    textout(screen,font," GAWAIN",60,430,pallete_color[6]);
+    textout(screen,font,"JUGADAS GAWAIN:",20,480,pallete_color[6]);
     }
 
     if ((turno%2)==1){
-    textout(screen,font," DIETRICH",60,430,pallete_color[1]);
-    textout(screen,font,"JUGADAS DIETRICH:",20,480,pallete_color[1]);
+    textout(screen,font," DIETRICH",60,430,pallete_color[3]);
+    textout(screen,font,"JUGADAS DIETRICH:",20,480,pallete_color[3]);
     }
-
-
 
     rectfill(screen,10,10,410,410,pallete_color[20]);
 
@@ -164,8 +209,6 @@ int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
     int Dy = (50*r)+10;
 
 
-
-
     if((turno%2)==1){
             blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
             blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
@@ -175,9 +218,6 @@ int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
             blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
             blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
     }
-
-
-
 
 
     int i=0,j,k,l,Ix,Iy;
@@ -205,6 +245,16 @@ int print_table(int c1, int c2,int turno,char *p_tablero,int winner){
             }
         }
     }
+
+    if (winner==1){
+            rectfill(screen,210,420,400,550,pallete_color[16]);
+            textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
+
+        }
+        else if(winner==2){
+            rectfill(screen,210,420,400,550,pallete_color[16]);
+            textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
+        }
 
     return 0;
 }
@@ -397,7 +447,6 @@ int mov_inv(int Pcx){
     //Si el número del dado que saco el jugador es menor a 9, le suma 1 al número
     //del dado para luego repetir el ciclo de código con el nuevo número de dado
     if(Pcx<9){
-        cout<<"EL MOVIMIENTO NO ES POSIBLE: "<<Pcx<<endl;
         Pcx=Pcx+1;                      //
     }
 
@@ -411,7 +460,6 @@ int mov_inv(int Pcx){
 
     return Pcx;     //Devuelve el nuevo numero del dado
 }
-
 
 
 
@@ -437,12 +485,6 @@ int pass(){
 
  }
 
-//Funcion clean: Usada para limpiar la pantalla
-int clean(){
-
-    system("cls");
-    return 0;
- }
 
 
 
@@ -524,7 +566,6 @@ int main() {
         turno=turno+1;                         //Suma 1 a la variable turno
         c1=dado(c1,turno,Pc1);                  //toma un numero de1 1 al 64 mediante la función dado() y la asigna al jugador 1
         *(p_tablero + (c1 -1))='G';                      //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
-        table(p_tablero);                         //Imprime el tablero actualizado
 
 
 
@@ -537,17 +578,16 @@ int main() {
             c2++;
         }
         *(p_tablero + (c2-1))='D';                      //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
-        table(p_tablero);                         //Imprime el tablero actualizado
 
         print_table(c1,c2,turno,p_tablero,winner);
+        textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
+        textout(screen,font,"DADO: ",210,450,pallete_color[15]);
+        pass();
 
         //4. JUEGO
         while(win==false){                      // Este ciclo se repite hasta que uno de los dos jugadores gane y contiene lo que se hara durante el turno 3 hasta que un jugador se queda sin movimientos
-            clean();                                //Limpia pantalla
             turno=turno+1;                      //Suma 1 a la variable turno
             contador=0;                         //Asigna el valor cero al contador de movimientos no validos
-            cout<<endl<<"Turno: "<<turno<<endl; //Imprime el turno actual
-
 
 
             //Para saber a que jugador le toca se hace la operación turno modulo dos.
@@ -557,7 +597,6 @@ int main() {
 
             //TURNO DEL JUGADOR 1
             case 1://Si turno modulo dos es uno, ejecuta el siguiente código
-                cout<<endl<<"TURNO DEL CABALLERO GAWAIN"<<endl;
                 srand(time(NULL));
                 Pc1=dado(c1,turno,Pc1);         //Adquiere un número del 1 al 8 (Se lanza el dado)
                 jugadaG++;
@@ -574,32 +613,28 @@ int main() {
                         if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                             if(x!=c2){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 2, continua con el código
                                 if(*(p_tablero + (x-1))==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                                    pass();
                                     *(p_tablero + (c1-1))='X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                     c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                                     *(p_tablero + (c1-1))='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                     flag=true;                      //termina el turno
                                     *(p_jugadasG + (jugadaG-1))=Pc1;           //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
-                                    //Se imprime lo que paso en el tablero de forma escrita
-                                    cout<<"Se movió a "<<c1<<endl;
-                                    cout<<"Dado: "<<Pc1<<endl;
+                                    textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
+                                    textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                                 }
                                 else{                           //Si al evaluar la posible nueva posición en el vector tablero NO corresponde al caracter ' ', vuelve a tirar el dado
                                     Pc1=mov_inv(Pc1);
                                 }
                             }
                             else{                               //Si el jugador 1 cae en la posicion del jugador 2
-                                pass();
                                 tablero[c1-1]='X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                 c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                                 tablero[c1-1]='G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                 flag=true;                      //termina el turno
                                 *(p_jugadasG + (jugadaG-1))=Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
-                                //Se imprime lo que paso en el tablero de forma escrita
-                                cout<<"Se movió a la posición de DIETRICH"<<c1<<endl;
-                                cout<<"Dado: "<<Pc1<<endl;
                                 win=true;                       //Indica que alguien gano
                                 winner=1;                       //Indica que el jugador 1 gano
+                                textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
+                                textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                             }
                         }
                         else{                           //Si la nueva posición no es valida, vuelve a tirar el dado
@@ -615,7 +650,6 @@ int main() {
 
             //TURNO DEL JUGADOR 2
             case 0://Si turno modulo dos es 0, ejecuta el siguiente código
-                cout<<endl<<"TURNO DEL CABALLERO DIETRICH"<<endl;
                 srand(time(NULL));              //Adquiere un número del 1 al 8 (Se lanza el dado)
                 Pc2=dado(c2,turno,Pc2);         //Ciclo que se repite hasta que el jugador termine su turno, llámese ciclo de turno
                 jugadaD++;
@@ -632,32 +666,28 @@ int main() {
                         if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                             if(x!=c1){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 1, continua con el código
                                 if(*(p_tablero + (x-1))==' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                                    pass();
                                     *(p_tablero + (c2-1))='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                     c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                                     *(p_tablero + (c2-1))='D';
                                     flag=true;                      //termina el turno
                                     *(p_jugadasD + (jugadaD-1))=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
-                                    //Se imprime lo que paso en el tablero de forma escrita
-                                    cout<<"Se movió a "<<c2<<endl;
-                                    cout<<"Dado: "<<Pc2<<endl;
+                                    textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
+                                    textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                                 }
                                 else{                           //Si al evaluar la posible nueva posición en el vector tablero NO corresponde al caracter ' ', vuelve a tirar el dado
                                     Pc2=mov_inv(Pc2);
                                 }
                             }
                             else{                           //Si el jugador 2 cae en la posicion del jugador 1
-                                pass();
                                 *(p_tablero + (c2-1))='X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                 c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                                 *(p_tablero + (c2-1))='D';
                                 flag=true;                      //termina el turno
                                 *(p_jugadasD + (jugadaD-1))=Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
-                                //Se imprime lo que paso en el tablero de forma escrita
-                                cout<<"Se movió a la posición de GAWAIN"<<c2<<endl;
-                                cout<<"Dado: "<<Pc2<<endl;
                                 win=true;                       //Indica que alguien gano
                                 winner=2;                       //Indica que el jugador 2 gano
+                                textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
+                                textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                             }
                         }
 
@@ -672,42 +702,44 @@ int main() {
                 break;
             }
             flag=false;                             //Asigna false a la variable flat para que el turno se pueda ejecutar correctamente el código del siguiente jugador
-            table(p_tablero);                         //Imprime el tablero
+            print_dado(Pc1,Pc2,turno);
+            pass();
+            rectfill(screen,210,410,410,530,pallete_color[16]);
             print_table(c1,c2,turno,p_tablero,winner);
-
-            //Imprime el vector que contiene las jugadas de Gawain de forma lineal y separando cada número por comas
-            cout<<"Jugadas Gawain: ";
-            for(i=0;i<=jugadaG;i++){
-                if ((*(p_jugadasG + i)<9) && (0<*(p_jugadasG + i))) {   //Valida que el numero del dado almacenado en el vesctor jugadasG este entre 0 y 9
-                    cout<<*(p_jugadasG + i)<<", ";
-                }
+            rectfill(screen,210,430,400,440,pallete_color[16]);
+            textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
+            pass();
             }
-            cout<<endl;
-
-            //Imprime el vector que contiene las jugadas de Dietrich forma lineal y separando cada número por comas
-            cout<<"Jugadas Dietrich: ";
-            for(i=0;i<jugadaD;i++){
-                if ((*(p_jugadasD + i)<9) && (0<*(p_jugadasD + i))) {   //Valida que el numero del dado almacenado en el vesctor jugadasD este entre 0 y 9
-                    cout<<*(p_jugadasD + i)<<", ";
-                }
-            }
-            cout<<endl;
-            }
-
 
         print_table(c1,c2,turno,p_tablero,winner);
+        rectfill(screen,210,410,410,500,pallete_color[16]);
+
+        BITMAP *caballero1 = load_bitmap("Caballero1.bmp",NULL);
+        BITMAP *caballero2 = load_bitmap("Caballero2.bmp",NULL);
+        BITMAP *winner1 = load_bitmap("winner1.bmp",NULL);
+        BITMAP *winner2 = load_bitmap("winner2.bmp",NULL);
 
         //5. GANADOR:
-        cout<<endl<<endl<<endl;
-        //Evalúa si gano el jugador 1 y si es así lo muestra en pantalla
         if (winner==1){
-            cout<<endl<<endl<<"DIETRICH HA PERDIDO"<<endl<<"GAWAIN HA GANADO EL AMOR DE LA PRINCESA"<<endl;
+            rectfill(screen,423,0,800,550,pallete_color[16]);
+
+            blit(winner1,screen,0,0,425,0,370,100);
+            blit(caballero1,screen,0,0,470,101,260,310);
+
+            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
         }
-        //Evalúa si gano el jugador 1 y si es así lo muestra en pantalla
-        if (winner==2){
-            cout<<endl<<endl<<"GAWAIN HA PERDIDO"<<endl<<"DIETRICH HA GANADO EL AMOR DE LA PRINCESA"<<endl;
+        else if(winner==2){
+            rectfill(screen,423,0,800,550,pallete_color[16]);
+
+            blit(winner2,screen,0,0,425,0,370,100);
+            blit(caballero2,screen,0,0,470,101,260,310);
+
+            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
         }
+
         pass();//Función que para el juego hasta que se oprima la flecha arriba
+
+        textout(screen,font," (Esto puede tardar unos segudos...)",470,470,pallete_color[15]);
 
         delete(p_jugadasD);
         delete(p_jugadasG);
