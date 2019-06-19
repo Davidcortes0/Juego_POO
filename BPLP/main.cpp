@@ -113,9 +113,9 @@ int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner
     BITMAP *guia = load_bitmap("guia.bmp",NULL);
 
     blit(howtoplay,screen,0,0,425,0,387,89);
-
-    textout(screen,font,"1. Para lanzar el dado y terminar el turno ",430,80,pallete_color[15]);
-    textout(screen,font,"presione la flecha ariba.",453,90,pallete_color[15]);
+                                                                       //
+    textout(screen,font,"1. Presione la flecha arriba para lanzar el",430,80,pallete_color[15]);
+    textout(screen,font,"dado o para terminar el turno",453,90,pallete_color[15]);
 
     textout(screen,font,"2. Cuando un caballero se mueve, la casilla ",430,110,pallete_color[15]);
     textout(screen,font,"en la que estaba queda tachada y no puede ",453,120,pallete_color[15]);
@@ -129,10 +129,10 @@ int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner
 
     textout(screen,font,"4. SE GANA SI SE CUMPLE ALGUNA DE ESTAS ",430,450,pallete_color[15]);
     textout(screen,font,"CONDICIONES: ",453,461,pallete_color[15]);
-    textout(screen,font,"- El jugador contrario no debe poder moverse ",430,480,pallete_color[15]);
-    textout(screen,font,"a otra casilla.",453,490,pallete_color[15]);
-    textout(screen,font,"- Si al lanzar el dado se cae en la posicion ",430,500,pallete_color[15]);
-    textout(screen,font,"del jugador contrario, eliminandolo.",453,510,pallete_color[15]);
+    textout(screen,font,"- El jugador contrario no se puede hacer ",430,480,pallete_color[15]);
+    textout(screen,font,"ninguno de los 8 movimientos.",453,490,pallete_color[15]);
+    textout(screen,font,"- Al lanzar el dado, se cae en la posicion ",430,500,pallete_color[15]);
+    textout(screen,font,"del jugador contrario.",453,510,pallete_color[15]);
 
     line(screen,420,0,420,550,pallete_color[15]);
     line(screen,421,0,421,550,pallete_color[15]);
