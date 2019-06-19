@@ -105,7 +105,7 @@ void print_dado(int Pc1,int Pc2,int turno){
 
 
 
-int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner){
+int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner,jugadas *p_jugadasG,jugadas *p_jugadasD,int jugadaG,int jugadaD){
 
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
@@ -141,16 +141,17 @@ int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner
     rectfill(screen,0,429,200,530,pallete_color[16]);
 
     textout(screen,font,"TURNO ",20,455,pallete_color[15]);
+    textprintf(screen,font,80,455,palette_color[15],"%d",turno);
     textout(screen,font,"JUEGA ",20,430,pallete_color[15]);
 
     if ((turno%2)==0){
     textout(screen,font," GAWAIN",60,430,pallete_color[6]);
-    textout(screen,font,"JUGADAS GAWAIN:",20,480,pallete_color[6]);
+    textout(screen,font,"JUGADAS REALIZADAS:",20,480,pallete_color[6]);
     }
 
     if ((turno%2)==1){
     textout(screen,font," DIETRICH",60,430,pallete_color[3]);
-    textout(screen,font,"JUGADAS DIETRICH:",20,480,pallete_color[3]);
+    textout(screen,font,"JUGADAS REALIZADAS:",20,480,pallete_color[3]);
     }
 
     rectfill(screen,10,10,410,410,pallete_color[20]);
@@ -220,19 +221,55 @@ int print_table(int c1, int c2,int turno,tablero *apuntadorDelTablero,int winner
     int Dx = (50*t)-40;
     int Dy = (50*r)+10;
 
+    int i,PG,PD,aux;
 
     if((turno%2)==1){
             blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
             blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
+
+            for(i=0;i<jugadaG;i++){
+                PD = (p_jugadasD + i) -> jugada;
+
+                aux = (20 + (i*15));
+
+                if (aux<211){
+                    if ( PD>0 && PD<9){
+                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
+                    }
+                }
+                else if (aux>211){
+                    if ( PD>0 && PD<9){
+                        textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
+                    }
+                }
+            }
     }
 
     if((turno%2)==0){
             blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
             blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
+
+            for(i=0;i<jugadaD;i++){
+                PG = (p_jugadasG + i) -> jugada;
+
+                aux = (20 + (i*15));
+
+                if (aux<211){
+                    if ( PG>0 && PG<9 ){
+                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
+                    }
+                }
+                else if (aux>211){
+                    if ( PG>0 && PG<9 ){
+                        textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
+                    }
+                }
+            }
     }
 
 
-    int i=0,j,k,l,Ix,Iy;
+    int j,k,l,Ix,Iy;
+    i=0;
 
     for(;i<64;i++){
         if( (apuntadorDelTablero + i) -> nombre  == 'X' ){
@@ -621,7 +658,7 @@ int main() {
         }
         ( apuntadorDelTablero + ( c2 - 1 ) ) -> nombre = 'D';    //Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
 
-        print_table(c1,c2,turno,apuntadorDelTablero,winner);
+        print_table(c1,c2,turno,apuntadorDelTablero,winner,p_jugadasG,p_jugadasD,jugadaG,jugadaD);
         textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
         textout(screen,font,"DADO: ",210,450,pallete_color[15]);
         pass();
@@ -747,13 +784,13 @@ int main() {
             print_dado(Pc1,Pc2,turno);
             pass();
             rectfill(screen,210,410,410,530,pallete_color[16]);
-            print_table(c1,c2,turno,apuntadorDelTablero,winner);
+            print_table(c1,c2,turno,apuntadorDelTablero,winner,p_jugadasG,p_jugadasD,jugadaG,jugadaD);
             rectfill(screen,210,430,400,440,pallete_color[16]);
             textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
             pass();
             }
 
-        print_table(c1,c2,turno,apuntadorDelTablero,winner);
+        print_table(c1,c2,turno,apuntadorDelTablero,winner,p_jugadasG,p_jugadasD,jugadaG,jugadaD);
         rectfill(screen,210,410,410,500,pallete_color[16]);
 
         BITMAP *caballero1 = load_bitmap("Caballero1.bmp",NULL);
