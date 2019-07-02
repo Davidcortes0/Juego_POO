@@ -32,7 +32,6 @@ tablero *cab;
 // Prototipos de las funciones usadas para la creación del tablero en forma de lista.
 int posicion_lista(int n); // Valida si ya existe y ubica la posición para insertar
 void insertar(tablero *, tablero *, int); // Inserta en la posicion adecuada
-void mostrar_lista();  // Muestra todo el contenido
 
 //FUNCIONES
 int posicion_lista(int n){
