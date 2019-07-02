@@ -67,7 +67,7 @@ int posicion_lista(int n){
 void insertar(tablero *p, tablero *q, int n){
  tablero *nuevo;
  nuevo=new tablero;
- nuevo->tablero=n;
+ nuevo->posicion=n;
  nuevo->siguiente=q;
  if(p != NULL){ // Quiere decir que hay uno o más nodos ya insertados
   p->siguiente=nuevo; // Al último nodo de la lista se le encadena el nodo nuevo
@@ -82,7 +82,7 @@ tablero * casillaDelTablero(int x )
     tablero *p=cab;
     while(p -> posicion < x )
     {
-        p=p->siguiente; 
+        p=p->siguiente;
     }
     return p;
 }
@@ -697,7 +697,7 @@ int main() {
             exit(2);
         }
         */
-        
+
         /*
         struct tablero *apuntadorDelTablero;
         apuntadorDelTablero = new struct tablero;
@@ -707,7 +707,7 @@ int main() {
             exit(2);
         }
         */
-        
+
         cab=NULL;
         int m;
         system("CLS");

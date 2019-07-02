@@ -17,3 +17,12 @@
 	<string.h>
 	<allegro.h>
 
+1562107269 source:c:\users\crist\onedrive\documentos\github\juego_poo\bplp\main.cpp
+	<iostream>
+	<cstdlib>
+	<ctime>
+	<conio.h>
+	<wchar.h>
+	<string.h>
+	<allegro.h>
+
