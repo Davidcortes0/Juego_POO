@@ -297,8 +297,13 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
 
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
+
+
+    /*
     BITMAP *howtoplay = load_bitmap("como_jugar.bmp",NULL);
     BITMAP *guia = load_bitmap("guia.bmp",NULL);
+
+
 
     blit(howtoplay,screen,0,0,425,0,387,89);
                                                                        //
@@ -321,6 +326,8 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
     textout(screen,font,"ninguno de los 8 movimientos.",453,490,pallete_color[15]);
     textout(screen,font,"- Al lanzar el dado, se cae en la posicion ",430,500,pallete_color[15]);
     textout(screen,font,"del jugador contrario.",453,510,pallete_color[15]);
+    */
+
 
     line(screen,420,0,420,550,pallete_color[15]);
     line(screen,421,0,421,550,pallete_color[15]);
@@ -334,12 +341,12 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
 
     if ((turno%2)==0){
     textout(screen,font," GAWAIN",60,430,pallete_color[6]);
-    textout(screen,font,"JUGADAS REALIZADAS:",20,480,pallete_color[6]);
+    textout(screen,font,"JUGADAS REALIZADAS:",20,490,pallete_color[6]);
     }
 
     if ((turno%2)==1){
     textout(screen,font," DIETRICH",60,430,pallete_color[3]);
-    textout(screen,font,"JUGADAS REALIZADAS:",20,480,pallete_color[3]);
+    textout(screen,font,"JUGADAS REALIZADAS:",20,490,pallete_color[3]);
     }
 
     rectfill(screen,10,10,410,410,pallete_color[20]);
@@ -430,7 +437,7 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
                 else if (aux>211){
                     if ( PD>0 && PD<9){
                         //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(casillaJugadasD(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",(casillaJugadasD(i)) -> jugada);
                     }
                 }
             }
@@ -455,7 +462,7 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
                 else if (aux>211){
                     if ( PG>0 && PG<9 ){
                         //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(casillaJugadasG(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",(casillaJugadasG(i)) -> jugada);
                     }
                 }
             }
@@ -497,6 +504,7 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
         else if(((p_Dietrich)->estado)==1){
             rectfill(screen,210,420,400,550,pallete_color[16]);
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
+
         }
 
     return 0;
@@ -506,7 +514,7 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
 void menu(){
 
 
-    BITMAP *buffer = create_system_bitmap(800,531);
+    BITMAP *buffer = create_system_bitmap(420,531);
     BITMAP *fondo1 = load_bitmap("FONDO1.bmp",NULL);
     BITMAP *fondo2 = load_bitmap("FONDO2.bmp",NULL);
     BITMAP *fondo3 = load_bitmap("FONDO3.bmp",NULL);
@@ -515,25 +523,25 @@ void menu(){
     bool salida=false;
 
     while (salida==false){
-        if (mouse_x > 211 && mouse_x < 553 && mouse_y >319 && mouse_y < 374){
-            blit(fondo2,buffer,0,0,0,0,800,531);
+        if (mouse_x > 30 && mouse_x < 380 && mouse_y >315 && mouse_y < 375){
+            blit(fondo2,buffer,0,0,0,0,420,531);
             if(mouse_b & 1){
                 salida = true;
             }
         }
-        else if (mouse_x > 211 && mouse_x < 404 && mouse_y > 418 && mouse_y < 465){
-            blit(fondo3,buffer,0,0,0,0,800,531);
+        else if (mouse_x > 107 && mouse_x < 293 && mouse_y > 418 && mouse_y < 465){
+            blit(fondo3,buffer,0,0,0,0,420,531);
             if(mouse_b & 1){
                 out = 1;
                 salida = true;
             }
         }
         else{
-            blit(fondo1,buffer,0,0,0,0,800,600);
+            blit(fondo1,buffer,0,0,0,0,420,600);
         }
 
     masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,13,22);
-    blit(buffer,screen,0,0,0,0,800,531);
+    blit(buffer,screen,0,0,0,0,420,531);
 
     }
 
@@ -752,7 +760,6 @@ int main() {
         p_Gawain= new struct caballero;
         if( p_Gawain == NULL )
         {
-            cout<< "No hay memoria disponible"<<endl;
             exit(2);
         }
 
@@ -760,7 +767,6 @@ int main() {
 
         cabD=NULL;
         int j;
-        system("CLS");
         for(j = 0; j < 32; j++ )
         {
 	        posicion_lista_D(j);
@@ -771,7 +777,6 @@ int main() {
         p_Dietrich = new struct caballero;
         if( p_Dietrich == NULL )
         {
-            cout<< "No hay memoria disponible"<<endl;
             exit(2);
         }
 
@@ -788,7 +793,6 @@ int main() {
 
         cabG=NULL;
         int r;
-        system("CLS");
         for(r = 0; r < 32; r++ )
         {
 	        posicion_lista_G(r);
@@ -846,7 +850,6 @@ int main() {
 
         cab=NULL;
         int m;
-        system("CLS");
         for(m = 0; m < 64; m++ )
         {
 	        posicion_lista(m);
@@ -1052,8 +1055,7 @@ int main() {
         print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD);
         rectfill(screen,210,410,410,500,pallete_color[16]);
 
-        BITMAP *caballero1 = load_bitmap("Caballero1.bmp",NULL);
-        BITMAP *caballero2 = load_bitmap("Caballero2.bmp",NULL);
+
         BITMAP *winner1 = load_bitmap("winner1.bmp",NULL);
         BITMAP *winner2 = load_bitmap("winner2.bmp",NULL);
 
@@ -1063,17 +1065,12 @@ int main() {
         if((p_Gawain->estado)==1){
             rectfill(screen,423,0,800,550,pallete_color[16]);
 
-            blit(winner1,screen,0,0,425,0,370,100);
-            blit(caballero1,screen,0,0,470,101,260,310);
+            blit(winner1,screen,0,0,20,420,370,100);
 
-            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
         }else if((p_Dietrich->estado)==1){
-            rectfill(screen,423,0,800,550,pallete_color[16]);
+            blit(winner2,screen,0,0,20,420,370,100);
 
-            blit(winner2,screen,0,0,425,0,370,100);
-            blit(caballero2,screen,0,0,470,101,260,310);
 
-            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
         }
 /*
         if (winner==1){
@@ -1091,7 +1088,6 @@ int main() {
 */
         pass();//Función que para el juego hasta que se oprima la flecha arriba
 
-        textout(screen,font," (Esto puede tardar unos segudos...)",470,470,pallete_color[15]);
 
         //delete(p_jugadasD);
         //delete(p_jugadasG);
@@ -1117,7 +1113,7 @@ void init(){
     depth = desktop_color_depth();
     if (depth == 0) depth = 32;
     set_color_depth(depth);
-    res = set_gfx_mode(GFX_AUTODETECT_WINDOWED, 800, 531 , 0, 0);
+    res = set_gfx_mode(GFX_AUTODETECT_WINDOWED, 420, 531 , 0, 0);
     if (res != 0) {
         allegro_message(allegro_error);
         exit(-1);
