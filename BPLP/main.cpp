@@ -220,13 +220,41 @@ jugadas* JUGADAS:: casillaJugadas(int x )
     return p;
 }
 */
-
+//--------------------------------------------------------------------------------------------------------------------
 struct caballero
 {
      int casilla;
      //int jugadas[32];
      int estado=0; // que un caballero este en estado 0 significa que no ha ganado, si gana pasa a estar en estado 1
 };
+
+class CABALLERO{
+private:
+    int casilla;
+    int estado;
+public:
+    CABALLERO(int j=0){
+        estado=j;
+    }
+    void winner(){
+        estado=1;
+    }
+    int get_estado(){
+        return estado;
+    }
+    void set_casilla(int k){
+        casilla=k;
+    }
+    int get_casilla(){
+        return casilla;
+    }
+};
+//---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 //DADOS
 //Función dado: determina el número del dado que saca cada jugador.
@@ -301,7 +329,7 @@ void print_dado(int Pc1,int Pc2,int turno){
 
 
 
-int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietrich,int jugadaG,int jugadaD, TABLERO *p_tablero, JUGADAS *p_jugadasG, JUGADAS *p_jugadasD){
+int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Dietrich,int jugadaG,int jugadaD, TABLERO *p_tablero, JUGADAS *p_jugadasG, JUGADAS *p_jugadasD){
 
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
@@ -507,12 +535,12 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
         }
     }
 
-    if (((p_Gawain)->estado) ==1){
+    if ( ((p_Gawain)->get_estado())==1){
             rectfill(screen,210,420,400,550,pallete_color[16]);
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
 
         }
-        else if(((p_Dietrich)->estado)==1){
+        else if( ((p_Dietrich)->get_estado())==1){
             rectfill(screen,210,420,400,550,pallete_color[16]);
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
 
@@ -767,8 +795,8 @@ int main() {
         int c1=0,c2=0,Pc1=0,Pc2=0,turno=0,x,i,Valida,contador,winner,jugadaG=0,jugadaD=0;
         bool win=false,flag=false;
 
-        struct caballero *p_Gawain;
-        p_Gawain= new struct caballero;
+        CABALLERO *p_Gawain;
+        p_Gawain= new CABALLERO;
         if( p_Gawain == NULL )
         {
             exit(2);
@@ -786,8 +814,8 @@ int main() {
         }
 
 
-        struct caballero *p_Dietrich;
-        p_Dietrich = new struct caballero;
+        CABALLERO *p_Dietrich;
+        p_Dietrich = new CABALLERO;
         if( p_Dietrich == NULL )
         {
             exit(2);
@@ -909,7 +937,7 @@ int main() {
         c1=dado(c1,turno,Pc1);                  //toma un numero de1 1 al 64 mediante la función dado() y la asigna al jugador 1
         ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
         //casillaDelTablero( c1 - 1 ) -> nombre  = 'G'; //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
-        (p_Gawain)->casilla=c1;
+        (p_Gawain)->set_casilla(c1);
 
 
 
@@ -923,7 +951,7 @@ int main() {
         }
         ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'D';
         //casillaDelTablero( c2 - 1 ) -> nombre = 'D';//Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
-        (p_Dietrich)->casilla=c2;
+        (p_Dietrich)->set_casilla(c2);
 
         print_table(c1,c2,turno, p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasD);
         textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
@@ -951,7 +979,7 @@ int main() {
                     if(contador>8){                 //Si el contador suma 8 errores ejecuta las siguientes tres líneas
                         win=true;                       //Indica que alguien gano
                         flag=true;                      //termina el turno
-                        (p_Dietrich)->estado=1;
+                        (p_Dietrich)->winner();
                         //winner=2;                       //Indica que el jugador 2 gano
                     }
                     x=posicion(c1,Pc1);             //Haya la posible nueva posición del jugador 1
@@ -966,7 +994,8 @@ int main() {
                                     c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
                                     ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
                                     //( casillaDelTablero( c1 - 1 ) ) -> nombre ='G';
-                                    (p_Gawain)->casilla=c1;              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
+                                    (p_Gawain)->set_casilla(c1);
+                                    //(p_Gawain)->casilla=c1;              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                     flag=true;                      //termina el turno
                                     ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada =Pc1;
                                     //(casillaJugadasG(jugadaG-1)) -> jugada = Pc1;
@@ -983,7 +1012,8 @@ int main() {
                                 ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'X';
                                 //( casillaDelTablero( c1 - 1 ) ) -> nombre = 'X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                 c1=x;                           //Asigna el valor de laposible nueva posición a la posición actual
-                                (p_Gawain)->casilla=c1;
+                                (p_Gawain)->set_casilla(c1);
+                                //(p_Gawain)->casilla=c1;
                                 ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
                                 //( casillaDelTablero( c1 - 1 ) ) -> nombre  = 'G';//Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                 flag=true;                      //termina el turno
@@ -992,7 +1022,8 @@ int main() {
                                 //(casillaJugadasG(jugadaG-1))->jugada=Pc1;
                                 //(p_jugadasG + (jugadaG - 1)) -> jugada = Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
                                 win=true;                       //Indica que alguien gano
-                                (p_Gawain)->estado=1;
+                                (p_Gawain)->winner();
+                                //(p_Gawain)->estado=1;
                                 //winner=1;                       //Indica que el jugador 1 gano
                                 textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
                                 textout(screen,font,"DADO: ",210,450,pallete_color[15]);
@@ -1019,7 +1050,8 @@ int main() {
                     if(contador>8){            //Si el contador suma 8 errores ejecuta las siguientes tres líneas
                         win=true;                   //Indica que alguien gano
                         flag=true;
-                        (p_Gawain)->estado=1;                 //termina el turno
+                        (p_Gawain)->winner();
+                        //(p_Gawain)->estado=1;                 //termina el turno
                         //winner=1;                   //Indica que el jugador 1 gano
                     }
                     x=posicion(c2,Pc2);         //Haya la posible nueva posición del jugador 1
@@ -1032,7 +1064,8 @@ int main() {
                                     ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'X';
                                     //( casillaDelTablero( c2 - 1 ) ) -> nombre  = 'X';             //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                     c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
-                                    (p_Dietrich)->casilla=c2;
+                                    (p_Dietrich)->set_casilla(c2);
+                                    //(p_Dietrich)->casilla=c2;
                                     ((p_tablero)->casillaDelTablero(c2-1))-> nombre = 'D';
                                     //( casillaDelTablero( c2 - 1 ) ) -> nombre  = 'D';
                                     flag=true;                      //termina el turno
@@ -1051,7 +1084,8 @@ int main() {
                                 ((p_tablero)->casillaDelTablero(c2-1))->nombre = 'X';
                                 //( casillaDelTablero( c2 - 1) ) -> nombre = 'X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
                                 c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
-                                (p_Dietrich)->casilla=c2;
+                                (p_Dietrich)->set_casilla(c2);
+                                //(p_Dietrich)->casilla=c2;
 
                                 ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'D';
                                 //( casillaDelTablero( c2 - 1 ) ) -> nombre = 'D';
@@ -1061,7 +1095,8 @@ int main() {
                                 //(p_Dietrich)->jugadas[jugadaD-1]=Pc2;
                                 //(p_jugadasD + (jugadaD-1)) -> jugada =Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                                 win=true;                       //Indica que alguien gano
-                                (p_Dietrich)->estado=1;
+                                (p_Dietrich)->winner();
+                                //(p_Dietrich)->estado=1;
                                 //winner=2;                       //Indica que el jugador 2 gano
                                 textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
                                 textout(screen,font,"DADO: ",210,450,pallete_color[15]);
@@ -1097,13 +1132,12 @@ int main() {
 
         //5. GANADOR:
 
-
-        if((p_Gawain->estado)==1){
+        if( ((p_Gawain)->get_estado())==1){
             rectfill(screen,423,0,800,550,pallete_color[16]);
 
             blit(winner1,screen,0,0,20,420,370,100);
 
-        }else if((p_Dietrich->estado)==1){
+        }else if( ((p_Dietrich)->get_estado())==1){
             blit(winner2,screen,0,0,20,420,370,100);
 
 
