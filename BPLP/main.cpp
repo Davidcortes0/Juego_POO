@@ -224,7 +224,6 @@ jugadas* JUGADAS:: casillaJugadas(int x )
 struct caballero
 {
      int casilla;
-     //int jugadas[32];
      int estado=0; // que un caballero este en estado 0 significa que no ha ganado, si gana pasa a estar en estado 1
 };
 
@@ -248,6 +247,7 @@ public:
     int get_casilla(){
         return casilla;
     }
+
 };
 //---------------------------------------------------------------------------------------------------------------------
 
@@ -545,6 +545,26 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
 
         }
+
+    //IMPRESION NOMBRE DE JUGADORES
+
+    textout(screen,font,"Gawain",Gx+2,Gy-12,pallete_color[15]);
+    textout(screen,font,"D",Dx+0,Dy-12,pallete_color[15]);
+    textout(screen,font,"i",Dx+7,Dy-12,pallete_color[15]);
+    textout(screen,font,"e",Dx+12,Dy-12,pallete_color[15]);
+    textout(screen,font,"t",Dx+18,Dy-12,pallete_color[15]);
+    textout(screen,font,"r",Dx+25,Dy-12,pallete_color[15]);
+    textout(screen,font,"i",Dx+31,Dy-12,pallete_color[15]);
+    textout(screen,font,"c",Dx+36,Dy-12,pallete_color[15]);
+    textout(screen,font,"h",Dx+42,Dy-12,pallete_color[15]);
+
+
+
+
+
+
+
+
 
     return 0;
 }
@@ -900,6 +920,9 @@ int main() {
 	        (p_tablero)->posicion_lista(m);
 	        //posicion_lista(m);
         }
+
+
+
 
         //Variables:
         //c1: Número que da la posición actual del jugador 1 (GAWAIN).
