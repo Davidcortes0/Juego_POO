@@ -33,9 +33,11 @@ struct tablero
 {
     int posicion;
     char nombre;
+    int jugada;
     tablero *siguiente;
 };
 class TABLERO{
+protected:
     tablero *cab;
 public:
     TABLERO(){ cab=NULL;}
@@ -112,9 +114,14 @@ tablero* TABLERO:: casillaDelTablero(int x )
 }
 //-------------------------------------------------------------------------------------------------------
 
+class JUGADAS: public TABLERO{
+public:
+    JUGADAS(): TABLERO(){
+        cab=NULL;
+    }
+};
 
-
-
+/*
 int posicion_lista_G(int n){
  jugadas *p, *q;
  int encontro=0;
@@ -144,6 +151,7 @@ int posicion_lista_G(int n){
  }
  return 0; // En caso de hacerse la inserci¢n correctamente retorna 0
 }
+
 
 int posicion_lista_D(int n){
  jugadas *p, *q;
@@ -176,6 +184,7 @@ int posicion_lista_D(int n){
 }
 
 
+
 void insertar_G(jugadas *p, jugadas *q, int n){
  jugadas *nuevo;
  nuevo=new jugadas;
@@ -201,26 +210,16 @@ void insertar_D(jugadas *p, jugadas *q, int n){
  }
 }
 
-jugadas *casillaJugadasG(int x )
+jugadas* JUGADAS:: casillaJugadas(int x )
 {
-    jugadas *p=cabG;
+    jugadas *p=cab;
     while(p -> posicion < x )
     {
         p=p->siguiente;
     }
     return p;
 }
-jugadas *casillaJugadasD(int x )
-{
-    jugadas *p=cabD;
-    while(p -> posicion < x )
-    {
-        p=p->siguiente;
-    }
-    return p;
-}
-
-
+*/
 
 struct caballero
 {
@@ -302,7 +301,7 @@ void print_dado(int Pc1,int Pc2,int turno){
 
 
 
-int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietrich,int jugadaG,int jugadaD, TABLERO *p_tablero){
+int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietrich,int jugadaG,int jugadaD, TABLERO *p_tablero, JUGADAS *p_jugadasG, JUGADAS *p_jugadasD){
 
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
@@ -433,20 +432,21 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
 
             for(i=0;i<jugadaG;i++){
                 //PD = (p_jugadasD + i) -> jugada;
-                PD = (casillaJugadasD(i))->jugada;
+                PD = ((p_jugadasD)->casillaDelTablero(i))->jugada;
+                //PD = (casillaJugadasD(i))->jugada;
 
                 aux = (20 + (i*15));
 
                 if (aux<211){
                     if ( PD>0 && PD<9){
                         //textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(casillaJugadasD(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",((p_jugadasD)->casillaDelTablero(i))->jugada);
                     }
                 }
                 else if (aux>211){
                     if ( PD>0 && PD<9){
                         //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",(casillaJugadasD(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",((p_jugadasD)->casillaDelTablero(i))->jugada);
                     }
                 }
             }
@@ -458,20 +458,21 @@ int print_table(int c1, int c2,int turno, caballero *p_Gawain,caballero *p_Dietr
 
             for(i=0;i<jugadaD;i++){
                 //PG = (p_jugadasG + i) -> jugada;
-                PG = (casillaJugadasG(i))->jugada;
+                PG= ((p_jugadasG)->casillaDelTablero(i))->jugada;
+                //PG = (casillaJugadasG(i))->jugada;
 
                 aux = (20 + (i*15));
 
                 if (aux<211){
                     if ( PG>0 && PG<9 ){
                         //textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(casillaJugadasG(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",((p_jugadasG)->casillaDelTablero(i))->jugada);
                     }
                 }
                 else if (aux>211){
                     if ( PG>0 && PG<9 ){
                         //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
-                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",(casillaJugadasG(i)) -> jugada);
+                        textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",((p_jugadasG)->casillaDelTablero(i))->jugada);
                     }
                 }
             }
@@ -775,11 +776,13 @@ int main() {
 
 
 
-        cabD=NULL;
+        JUGADAS *p_jugadasD;
+        p_jugadasD= new JUGADAS;
+        //cabD=NULL;
         int j;
         for(j = 0; j < 32; j++ )
         {
-	        posicion_lista_D(j);
+	        (p_jugadasD)->posicion_lista(j);
         }
 
 
@@ -801,11 +804,14 @@ int main() {
         }
         */
 
-        cabG=NULL;
+
+        JUGADAS *p_jugadasG;
+        p_jugadasG= new JUGADAS;
+        //cabG=NULL;
         int r;
         for(r = 0; r < 32; r++ )
         {
-	        posicion_lista_G(r);
+	        (p_jugadasG)->posicion_lista(r);
         }
         /*
         struct jugadas *p_jugadasG;
@@ -919,7 +925,7 @@ int main() {
         //casillaDelTablero( c2 - 1 ) -> nombre = 'D';//Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
         (p_Dietrich)->casilla=c2;
 
-        print_table(c1,c2,turno, p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero);
+        print_table(c1,c2,turno, p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasD);
         textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
         textout(screen,font,"DADO: ",210,450,pallete_color[15]);
         pass();
@@ -962,7 +968,8 @@ int main() {
                                     //( casillaDelTablero( c1 - 1 ) ) -> nombre ='G';
                                     (p_Gawain)->casilla=c1;              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                     flag=true;                      //termina el turno
-                                    (casillaJugadasG(jugadaG-1)) -> jugada = Pc1;
+                                    ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada =Pc1;
+                                    //(casillaJugadasG(jugadaG-1)) -> jugada = Pc1;
                                     //(p_jugadasG + (jugadaG-1)) -> jugada =Pc1;
                                     //(p_Gawain)->jugadas[jugadaG-1]=Pc1;           //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
                                     textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
@@ -981,7 +988,8 @@ int main() {
                                 //( casillaDelTablero( c1 - 1 ) ) -> nombre  = 'G';//Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
                                 flag=true;                      //termina el turno
                                 //(p_Gawain)->jugadas[jugadaG-1]=Pc1;
-                                (casillaJugadasG(jugadaG-1))->jugada=Pc1;
+                                ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada = Pc1;
+                                //(casillaJugadasG(jugadaG-1))->jugada=Pc1;
                                 //(p_jugadasG + (jugadaG - 1)) -> jugada = Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
                                 win=true;                       //Indica que alguien gano
                                 (p_Gawain)->estado=1;
@@ -1028,7 +1036,8 @@ int main() {
                                     ((p_tablero)->casillaDelTablero(c2-1))-> nombre = 'D';
                                     //( casillaDelTablero( c2 - 1 ) ) -> nombre  = 'D';
                                     flag=true;                      //termina el turno
-                                    (casillaJugadasD(jugadaD-1))->jugada=Pc2;
+                                    ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada=Pc2;
+                                    //(casillaJugadasD(jugadaD-1))->jugada=Pc2;
                                     //(p_Dietrich)->jugadas[jugadaD-1]=Pc2;
                                     //(p_jugadasD + (jugadaD-1)) -> jugada =Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                                     textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
@@ -1047,7 +1056,8 @@ int main() {
                                 ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'D';
                                 //( casillaDelTablero( c2 - 1 ) ) -> nombre = 'D';
                                 flag=true;                      //termina el turno
-                                (casillaJugadasD(jugadaD-1))->jugada=Pc2;
+                                ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada = Pc2;
+                                //(casillaJugadasD(jugadaD-1))->jugada=Pc2;
                                 //(p_Dietrich)->jugadas[jugadaD-1]=Pc2;
                                 //(p_jugadasD + (jugadaD-1)) -> jugada =Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                                 win=true;                       //Indica que alguien gano
@@ -1072,13 +1082,13 @@ int main() {
             print_dado(Pc1,Pc2,turno);
             pass();
             rectfill(screen,210,410,410,530,pallete_color[16]);
-            print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero);
+            print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasD);
             rectfill(screen,210,430,400,440,pallete_color[16]);
             textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
             pass();
             }
 
-        print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero);
+        print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasG);
         rectfill(screen,210,410,410,500,pallete_color[16]);
 
 
