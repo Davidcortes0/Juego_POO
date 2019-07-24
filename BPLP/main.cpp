@@ -10,6 +10,9 @@
 #include<string.h>
 //LIBRERIA PARA IMPRESION GRAFICA
 #include <allegro.h>
+
+
+
 //FUNCIONES PARA IMPLEMENTAR LA INTERFAZ GRAFICA
 void init();
 void deinit();
@@ -18,7 +21,11 @@ using namespace std;
 
 int out = 0;            //Variable para indicar la opcion elegida en el menu del juego
 
-//----------------------------------ACERCA DEL TABLERO---------------------------------------------
+
+
+
+
+//----------------------------------ESTRUCTURAS---------------------------------------------
 struct jugadas
 {
     int posicion;
@@ -36,6 +43,21 @@ struct tablero
     int jugada;
     tablero *siguiente;
 };
+
+struct caballero
+{
+     int casilla;
+     int estado=0; // que un caballero este en estado 0 significa que no ha ganado, si gana pasa a estar en estado 1
+};
+
+
+
+
+
+
+
+//----------------------------------CLASES---------------------------------------------
+
 class TABLERO{
 protected:
     tablero *cab;
@@ -46,8 +68,42 @@ public:
     tablero *casillaDelTablero(int x);
 };
 
+class JUGADAS: public TABLERO{
+public:
+    JUGADAS(): TABLERO(){
+        cab=NULL;
+    }
+};
 
-//tablero *cab;
+class CABALLERO{
+private:
+    int casilla;
+    int estado;
+public:
+    CABALLERO(int j=0){
+        estado=j;
+    }
+    void winner(){
+        estado=1;
+    }
+    int get_estado(){
+        return estado;
+    }
+    void set_casilla(int k){
+        casilla=k;
+    }
+    int get_casilla(){
+        return casilla;
+    }
+
+};
+
+
+
+
+
+
+//----------------------------------PROTOTIPOS PARA LISTA DINAMICA---------------------------------------------
 
 // Prototipos de las funciones usadas para la creación del tablero en forma de lista.
 //int posicion_lista(int n); // Valida si ya existe y ubica la posición para insertar
@@ -59,7 +115,10 @@ int posicion_lista_D(int n);
 void insertar_G(jugadas *, jugadas *, int );
 void insertar_D(jugadas *, jugadas *, int );
 
-//FUNCIONES
+//----------------------------------FUNCIONES---------------------------------------------
+
+//NODOS
+
 int TABLERO:: posicion_lista(int n){
  tablero *p, *q;
  int encontro=0;
@@ -112,151 +171,16 @@ tablero* TABLERO:: casillaDelTablero(int x )
     }
     return p;
 }
-//-------------------------------------------------------------------------------------------------------
-
-class JUGADAS: public TABLERO{
-public:
-    JUGADAS(): TABLERO(){
-        cab=NULL;
-    }
-};
-
-/*
-int posicion_lista_G(int n){
- jugadas *p, *q;
- int encontro=0;
- p=NULL;
- q=cabG;
- // Con el siguiente while recorremos la lista de principio a fin
- // y al final *p apunta al último nodo de la lista
- while(q != NULL && !encontro){
-  if(n > q->posicion){
-   p=q;
-   q=q->siguiente;
-  }
-  else{
-   encontro=1;
-  }
- }
- if(encontro){
-  if(n == q->posicion){
-   return -1; // retorna -1 cuando el elemento está repetido
-  }
-  else{
-   insertar_G(p,q,n);
-  }
- }
- else{
-  insertar_G(p,q,n);
- }
- return 0; // En caso de hacerse la inserci¢n correctamente retorna 0
-}
-
-
-int posicion_lista_D(int n){
- jugadas *p, *q;
- int encontro=0;
- p=NULL;
- q=cabD;
- // Con el siguiente while recorremos la lista de principio a fin
- // y al final *p apunta al último nodo de la lista
- while(q != NULL && !encontro){
-  if(n > q->posicion){
-   p=q;
-   q=q->siguiente;
-  }
-  else{
-   encontro=1;
-  }
- }
- if(encontro){
-  if(n == q->posicion){
-   return -1; // retorna -1 cuando el elemento está repetido
-  }
-  else{
-   insertar_D(p,q,n);
-  }
- }
- else{
-  insertar_D(p,q,n);
- }
- return 0; // En caso de hacerse la inserci¢n correctamente retorna 0
-}
 
 
 
-void insertar_G(jugadas *p, jugadas *q, int n){
- jugadas *nuevo;
- nuevo=new jugadas;
- nuevo->posicion=n;
- nuevo->siguiente=q;
- if(p != NULL){ // Quiere decir que hay uno o más nodos ya insertados
-  p->siguiente=nuevo; // Al último nodo de la lista se le encadena el nodo nuevo
- }
- else{
-  cabG=nuevo;
- }
-}
-void insertar_D(jugadas *p, jugadas *q, int n){
- jugadas *nuevo;
- nuevo=new jugadas;
- nuevo->posicion=n;
- nuevo->siguiente=q;
- if(p != NULL){ // Quiere decir que hay uno o más nodos ya insertados
-  p->siguiente=nuevo; // Al último nodo de la lista se le encadena el nodo nuevo
- }
- else{
-  cabD=nuevo;
- }
-}
 
-jugadas* JUGADAS:: casillaJugadas(int x )
-{
-    jugadas *p=cab;
-    while(p -> posicion < x )
-    {
-        p=p->siguiente;
-    }
-    return p;
-}
-*/
-//--------------------------------------------------------------------------------------------------------------------
-struct caballero
-{
-     int casilla;
-     int estado=0; // que un caballero este en estado 0 significa que no ha ganado, si gana pasa a estar en estado 1
-};
-
-class CABALLERO{
-private:
-    int casilla;
-    int estado;
-public:
-    CABALLERO(int j=0){
-        estado=j;
-    }
-    void winner(){
-        estado=1;
-    }
-    int get_estado(){
-        return estado;
-    }
-    void set_casilla(int k){
-        casilla=k;
-    }
-    int get_casilla(){
-        return casilla;
-    }
-
-};
-//---------------------------------------------------------------------------------------------------------------------
-
-
-
+//--------------------------------------------
 
 
 
 //DADOS
+
 //Función dado: determina el número del dado que saca cada jugador.
 //Parámetros(Posición actual, turno, variable para guardar el número del dado)
 int dado(int cx,int turno,int Pcx){
@@ -277,18 +201,29 @@ int dado(int cx,int turno,int Pcx){
 }
 
 
+
+
+//--------------------------------------------
+
+
+
+//ALLEGRO
+
+//Función print_dado: Imprime en pantalla la imagen del dado correspondiente al jugaador.
+//Parámetros(Numero de dado del jugador 1 y 2, turno)
 void print_dado(int Pc1,int Pc2,int turno){
 
-    int Pcx;
+    int Pcx;                //Variable para almacenar el numero de dado con el cual trabajar
 
-    if ((turno%2)==1){
+    if ((turno%2)==1){      //Si es turno del jugador 1, se trabaja con el dado del jugador 1
         Pcx = Pc1;
     }
-    else if ((turno%2)==0){
+    else if ((turno%2)==0){ //Si es turno del jugador 1, se trabaja con el dado del jugador 1
         Pcx = Pc2;
     }
 
-
+    //Creación de BITMAP's para futuras impresion del dado en pantalla, es decir,
+    //accede las 8 imagenes de dados diferentes que puede sacar el jugador
     BITMAP *dado1 = load_bitmap("dado1.bmp",NULL);
     BITMAP *dado2 = load_bitmap("dado2.bmp",NULL);
     BITMAP *dado3 = load_bitmap("dado3.bmp",NULL);
@@ -298,6 +233,7 @@ void print_dado(int Pc1,int Pc2,int turno){
     BITMAP *dado7 = load_bitmap("dado7.bmp",NULL);
     BITMAP *dado8 = load_bitmap("dado8.bmp",NULL);
 
+    //Imprime el BITMAP correspondiente al numero del dado que saco el jugador actual
     switch(Pcx){
 
         case 1: blit(dado1,screen,0,0,273,444,72,72);
@@ -328,62 +264,40 @@ void print_dado(int Pc1,int Pc2,int turno){
 }
 
 
-
+//Función print_table: Imprime en pantalla toda la parte grafica del juego.
+//Parámetros(Posicion jugador 1 y 2, turno, apuntador a jugador 1 y 2, Numero de jugadas de jugador 1 y 2, Apuntador al tablero, Apuntador a las jugadas del jugador 1 y 2)
 int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Dietrich,int jugadaG,int jugadaD, TABLERO *p_tablero, JUGADAS *p_jugadasG, JUGADAS *p_jugadasD){
 
+
+    //Creacion de BITMAP's para la impresion de jugadores en pantalla,
+    //es decir, accede las imagenes del jugador 1 y 2
     BITMAP *bmpG = load_bitmap("Gawain.bmp",NULL);
     BITMAP *bmpD = load_bitmap("Dietrich.bmp",NULL);
 
-
-    /*
-    BITMAP *howtoplay = load_bitmap("como_jugar.bmp",NULL);
-    BITMAP *guia = load_bitmap("guia.bmp",NULL);
-
-
-
-    blit(howtoplay,screen,0,0,425,0,387,89);
-                                                                       //
-    textout(screen,font,"1. Presione la flecha arriba para lanzar el",430,80,pallete_color[15]);
-    textout(screen,font,"dado o para terminar el turno",453,90,pallete_color[15]);
-
-    textout(screen,font,"2. Cuando un caballero se mueve, la casilla ",430,110,pallete_color[15]);
-    textout(screen,font,"en la que estaba queda tachada y no puede ",453,120,pallete_color[15]);
-    textout(screen,font,"volver a usarse",453,130,pallete_color[15]);
-
-    textout(screen,font,"3. El caballero se movera segun el numero ",430,150,pallete_color[15]);
-    textout(screen,font,"del dado que le salga de la siguiente ",453,160,pallete_color[15]);
-    textout(screen,font,"forma:",453,170,pallete_color[15]);
-
-    blit(guia,screen,0,0,485,185,251,253);
-
-    textout(screen,font,"4. SE GANA SI SE CUMPLE ALGUNA DE ESTAS ",430,450,pallete_color[15]);
-    textout(screen,font,"CONDICIONES: ",453,461,pallete_color[15]);
-    textout(screen,font,"- El jugador contrario no se puede hacer ",430,480,pallete_color[15]);
-    textout(screen,font,"ninguno de los 8 movimientos.",453,490,pallete_color[15]);
-    textout(screen,font,"- Al lanzar el dado, se cae en la posicion ",430,500,pallete_color[15]);
-    textout(screen,font,"del jugador contrario.",453,510,pallete_color[15]);
-    */
-
-
-    line(screen,420,0,420,550,pallete_color[15]);
-    line(screen,421,0,421,550,pallete_color[15]);
-    line(screen,422,0,422,550,pallete_color[15]);
-
+    //Limpia la pantalla
     rectfill(screen,0,429,200,530,pallete_color[16]);
 
+
+    //IMPRESION DE AYUDAS EN PANTALLA PARA ENTENDIMIENTO DE DATOS
     textout(screen,font,"TURNO ",20,455,pallete_color[15]);
     textprintf(screen,font,80,455,palette_color[15],"%d",turno);
     textout(screen,font,"JUEGA ",20,430,pallete_color[15]);
 
-    if ((turno%2)==0){
+    if ((turno%2)==0){          //Si es turno del jugador 1, imprime su nombre
     textout(screen,font," GAWAIN",60,430,pallete_color[6]);
     textout(screen,font,"JUGADAS REALIZADAS:",20,490,pallete_color[6]);
     }
 
-    if ((turno%2)==1){
+    if ((turno%2)==1){          //Si es turno del jugador 2, imprime su nombre
     textout(screen,font," DIETRICH",60,430,pallete_color[3]);
     textout(screen,font,"JUGADAS REALIZADAS:",20,490,pallete_color[3]);
     }
+
+    //------------------------------------------------------------------------------//
+    //CREACION DEL TABLERO
+
+    //Se crea un gran cuadrado y luego cuadros pequeños de otro color dejando entre
+    //si espacios de 50 pixeles y si salir del cuadrado grande
 
     rectfill(screen,10,10,410,410,pallete_color[20]);
 
@@ -426,80 +340,93 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
     rectfill(screen,360,160,410,210,pallete_color[12]);
     rectfill(screen,360,260,410,310,pallete_color[12]);
     rectfill(screen,360,360,410,410,pallete_color[12]);
+    //------------------------------------------------------------------------------//
 
+    //ANALISIS DE DATOS PARA DETERMINAR POSICION DE JUGADORES EN PANTALLA
 
-    //Gawain
+    //JUGADOR 1
+
+    //Mediante la posicion actual del jugador se halla la cordenada en x que esta posicion representa en pantalla
     int x = (c1%8);
     if (x==0) x = 8;
     int z = c1;
     while((z%8)!=0){
         z=z+1;
     }
+
+    //Mediante la posicion actual del jugador se halla la cordenada en y que esta posicion representa en pantalla
     int y = (z/8);
     int Gx = (50*x)-40;
     int Gy = (50*y)+10;
 
 
 
-    //Dietrich
+    //JUGADOR 2
+
+    //Mediante la posicion actual del jugador se halla la cordenada en x que esta posicion representa en pantalla
     int t = (c2%8);
     if (t==0) t = 8;
     z = c2;
     while((z%8)!=0){
         z=z+1;
     }
+
+    //Mediante la posicion actual del jugador se halla la cordenada en y que esta posicion representa en pantalla
     int r = (z/8);
     int Dx = (50*t)-40;
     int Dy = (50*r)+10;
 
+
+
     int i,PG,PD,aux;
 
+
+
+    //Si es turno del jugador 1:
     if((turno%2)==1){
-            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
-            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
+            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);   //Imprime la imagen del jugador 2 segun las coordenadas obtenidas
+            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);   //Imprime la imagen del jugador 1 segun las coordenadas obtenidas
 
             for(i=0;i<jugadaG;i++){
-                //PD = (p_jugadasD + i) -> jugada;
-                PD = ((p_jugadasD)->casillaDelTablero(i))->jugada;
-                //PD = (casillaJugadasD(i))->jugada;
+                PD = ((p_jugadasD)->casillaDelTablero(i))->jugada;  //Halla el numero del dado del jugador actual
 
-                aux = (20 + (i*15));
+                aux = (20 + (i*15));    //Determina la posicion en el eje x para impresion del numerod el dado
 
-                if (aux<211){
+                if (aux<211){               //Si esta dentro del limite para impresion y el numero del dado es un numero del 1 al 8:
+                                            //Imprime el numero del dado en la posicion hallada
                     if ( PD>0 && PD<9){
-                        //textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
                         textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",((p_jugadasD)->casillaDelTablero(i))->jugada);
                     }
                 }
-                else if (aux>211){
+                else if (aux>211){          //Si esta fuera del limite para impresion y el numero del dado es un numero del 1 al 8:
+                                            //Imprime el numero del dado en una nueva posicion que este dentro del limite teniendo en cuenta
+                                            //la posicion hallada
                     if ( PD>0 && PD<9){
-                        //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasD + i) -> jugada);
                         textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",((p_jugadasD)->casillaDelTablero(i))->jugada);
                     }
                 }
             }
     }
-
+    //Si es turno del jugador 2:
     if((turno%2)==0){
-            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);
-            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);
+            blit(bmpG,screen,0,0,Gx,Gy-50,50,50);   //Imprime la imagen del jugador 1 segun las coordenadas obtenidas
+            blit(bmpD,screen,0,0,Dx,Dy-50,50,50);   //Imprime la imagen del jugador 2 segun las coordenadas obtenidas
 
             for(i=0;i<jugadaD;i++){
-                //PG = (p_jugadasG + i) -> jugada;
-                PG= ((p_jugadasG)->casillaDelTablero(i))->jugada;
-                //PG = (casillaJugadasG(i))->jugada;
+                PG= ((p_jugadasG)->casillaDelTablero(i))->jugada;  //Halla el numero del dado del jugador actual
 
-                aux = (20 + (i*15));
+                aux = (20 + (i*15));    //Determina la posicion en el eje x para impresion del numerod el dado
 
-                if (aux<211){
+                if (aux<211){               //Si esta dentro del limite para impresion y el numero del dado es un numero del 1 al 8:
+                                            //Imprime el numero del dado en la posicion hallada
                     if ( PG>0 && PG<9 ){
-                        //textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
                         textprintf(screen,font,(20 + (i*15)),500,palette_color[15],"%d, ",((p_jugadasG)->casillaDelTablero(i))->jugada);
                     }
                 }
-                else if (aux>211){
+                else if (aux>211){          //Si esta fuera del limite para impresion y el numero del dado es un numero del 1 al 8:
+                                            //Imprime el numero del dado en una nueva posicion que este dentro del limite teniendo en cuenta
+                                            //la posicion hallada
                     if ( PG>0 && PG<9 ){
-                        //textprintf(screen,font,(20 + (i*15))-192,510,palette_color[15],"%d, ",(p_jugadasG + i) -> jugada);
                         textprintf(screen,font,(20 + (i*15))-190,510,palette_color[15],"%d, ",((p_jugadasG)->casillaDelTablero(i))->jugada);
                     }
                 }
@@ -510,9 +437,13 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
     int j,k,l,Ix,Iy;
     i=0;
 
+
+    //IMPRESION DE CASILLAS TACHADAS EN EL TABLERO
+    //Este ciclo recorre el tablero casilla pos casilla
     for(;i<64;i++){
-        if(((p_tablero)->casillaDelTablero(i))-> nombre == 'X'){
-        //if( casillaDelTablero( i ) -> nombre  == 'X' ){
+        if(((p_tablero)->casillaDelTablero(i))-> nombre == 'X'){    //Si en la casilla hay una X
+
+            //Determina las coordenadas del las 4 esquinas de la casilla
             j = i%8;
             k=i;
             while((k%8)!=0){
@@ -521,6 +452,8 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
             l = (k/8);
             Ix = (50*j)-40;
             Iy = (50*l)+10;
+
+            //Segun la comlumna en que este la casilla, ajusta las coordenadas e imprime un cuadrado con una x
 
             if (j!=0){
             line(screen,Ix+50,Iy,Ix+100,Iy-50,pallete_color[15]);
@@ -535,11 +468,15 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
         }
     }
 
+
+
+    //Si el jugador 1 gano la partida, Muestra uun mensaje indicando que se debe avanzar
     if ( ((p_Gawain)->get_estado())==1){
             rectfill(screen,210,420,400,550,pallete_color[16]);
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
 
         }
+        //Si el jugador  gano la partida, Muestra uun mensaje indicando que se debe avanzar
         else if( ((p_Dietrich)->get_estado())==1){
             rectfill(screen,210,420,400,550,pallete_color[16]);
             textout(screen,font,"Presione la flecha arriba",210,450,pallete_color[15]);
@@ -548,6 +485,9 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
 
     //IMPRESION NOMBRE DE JUGADORES
 
+
+    //Mediante las coordenadas obtenidas para la impresion de la imagen del jugador,
+    //se imprime el nombre de cada uno de estos sobre su imagen
     textout(screen,font,"Gawain",Gx+2,Gy-12,pallete_color[15]);
     textout(screen,font,"D",Dx+0,Dy-12,pallete_color[15]);
     textout(screen,font,"i",Dx+7,Dy-12,pallete_color[15]);
@@ -559,59 +499,67 @@ int print_table(int c1, int c2,int turno, CABALLERO *p_Gawain, CABALLERO *p_Diet
     textout(screen,font,"h",Dx+42,Dy-12,pallete_color[15]);
 
 
-
-
-
-
-
-
-
     return 0;
 }
 
 
 void menu(){
 
-
+    //Creacion de BITMAP's para la impresion de menu y cursor en pantalla,
+    //es decir, accede las imagenes del menu y el cursor. Ademas, crea un
+    //buffer sobre el screen para trabajar sobre este
     BITMAP *buffer = create_system_bitmap(420,531);
     BITMAP *fondo1 = load_bitmap("FONDO1.bmp",NULL);
     BITMAP *fondo2 = load_bitmap("FONDO2.bmp",NULL);
     BITMAP *fondo3 = load_bitmap("FONDO3.bmp",NULL);
     BITMAP *cursor = load_bitmap("cursor.bmp",NULL);
 
-    bool salida=false;
+    bool salida=false;  //Nos indica si se elegio alguna obcion el el menu (true si se hizo y false si no)
 
+    //Mientras no se seleccione ninguna opcion
     while (salida==false){
+
+        //Si el mause esta dentro de las cordenadas de la opcion comenzar, imprime la imagen que tiene esta opcion exaltada
         if (mouse_x > 30 && mouse_x < 380 && mouse_y >315 && mouse_y < 375){
             blit(fondo2,buffer,0,0,0,0,420,531);
-            if(mouse_b & 1){
+            if(mouse_b & 1){    //Si se da click mientras que el mause esta en dichas coordenadas, acaba el ciclo
                 salida = true;
             }
         }
+
+        //Si el mause esta dentro de las cordenadas de la opcion salir, imprime la imagen que tiene esta opcion exaltada
         else if (mouse_x > 107 && mouse_x < 293 && mouse_y > 418 && mouse_y < 465){
             blit(fondo3,buffer,0,0,0,0,420,531);
-            if(mouse_b & 1){
+            if(mouse_b & 1){    //Si se da click mientras que el mause esta en dichas coordenadas,
+                                //acaba el ciclo e indica que se quiere salir del juego
                 out = 1;
                 salida = true;
             }
         }
+        //Si no se hace nada imprime la imagen base del menu
         else{
             blit(fondo1,buffer,0,0,0,0,420,600);
         }
 
+    //Funciones para el control de la impresion del mause en pantalla
     masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,13,22);
     blit(buffer,screen,0,0,0,0,420,531);
 
     }
 
+    //Destruye el buffer ya que en el juego se trabaja sobre el screen
     destroy_bitmap(buffer);
 
 }
 
 
 
+//--------------------------------------------
+
+
 
 //POSICION
+
 //Función posición: Determina la posible nueva posición
 //Parámetros(Posición actual, Numero del dado)
 int posicion(int cx,int Pcx){
@@ -747,8 +695,12 @@ int validapos(int cx,int Pcx,int x){
 
 
 
+//--------------------------------------------
+
+
 
 //MOVIMIENTO NO VALIDO
+
 //Funcion mov_inv: Cambia el numero del dado cuando la jugada no se puede hacer
 //Parametros(Numero del dado)
 int mov_inv(int Pcx){
@@ -771,6 +723,9 @@ int mov_inv(int Pcx){
     return Pcx;     //Devuelve el nuevo numero del dado
 }
 
+
+
+//--------------------------------------------
 
 
 
@@ -798,13 +753,23 @@ int pass(){
 
 
 
-//JUEGO
+//--------------------------------------------
+
+
+
+//----------------------------------JUEGO---------------------------------------------
+
 int main() {
 
-    init();
-    menu();
+    init();     //Inicia la ejecucion de la interfaz grafica
+    menu();     //Ejecuta el menu
+
+
+    //Limpia la pantalla
     rectfill(screen,0,0,800,800,pallete_color[16]);
 
+
+    //Si se eligio la opcion comenzar en el menu
     if (out==0){
 
         setlocale(LC_ALL, "");  //FUNCIÓN PARA ESCRIBIR CON TILDES LAS IMPRESIONES EN PANTALLA
@@ -823,17 +788,6 @@ int main() {
         }
 
 
-
-        JUGADAS *p_jugadasD;
-        p_jugadasD= new JUGADAS;
-        //cabD=NULL;
-        int j;
-        for(j = 0; j < 32; j++ )
-        {
-	        (p_jugadasD)->posicion_lista(j);
-        }
-
-
         CABALLERO *p_Dietrich;
         p_Dietrich = new CABALLERO;
         if( p_Dietrich == NULL )
@@ -841,76 +795,24 @@ int main() {
             exit(2);
         }
 
-        /*
-        int jugadasG[32];
-        int *p_jugadasG;
-        p_jugadasG= new int[32];
-        p_jugadasG=&jugadasG[0];
-        if(p_jugadasG==NULL){
-        cout<< "No hay memoria disponible"<<endl;
-        exit(2);
+
+        JUGADAS *p_jugadasD;
+        p_jugadasD= new JUGADAS;
+        int j;
+        for(j = 0; j < 32; j++ )
+        {
+	        (p_jugadasD)->posicion_lista(j);
         }
-        */
 
 
         JUGADAS *p_jugadasG;
         p_jugadasG= new JUGADAS;
-        //cabG=NULL;
         int r;
         for(r = 0; r < 32; r++ )
         {
 	        (p_jugadasG)->posicion_lista(r);
         }
-        /*
-        struct jugadas *p_jugadasG;
-        p_jugadasG = new struct jugadas[32];
-        if( p_jugadasG == NULL )
-        {
-            cout<< "No hay memoria disponible"<<endl;
-            exit(2);
-        }
-        */
 
-        /*
-        int jugadasD[32];
-        int *p_jugadasD;
-        p_jugadasD= new int[32];
-        p_jugadasD=&jugadasD[0];
-        if(p_jugadasD==NULL){
-            cout<< "No hay memoria disponible"<<endl;
-            exit(2);
-        }
-        */
-        /*
-        struct jugadas *p_jugadasD;
-        p_jugadasD = new struct jugadas[32];
-        if( p_jugadasD == NULL )
-        {
-            cout<< "No hay memoria disponible"<<endl;
-            exit(2);
-        }
-        */
-
-        /*
-        char tablero[64];
-        char *p_tablero;
-        p_tablero= new char[64];
-        p_tablero=&tablero[0];
-        if(p_tablero==NULL){
-            cout<< "No hay memoria disponible"<<endl;
-            exit(2);
-        }
-        */
-
-        /*
-        struct tablero *apuntadorDelTablero;
-        apuntadorDelTablero = new struct tablero;
-        if( apuntadorDelTablero == NULL )
-        {
-            cout<< "No hay memoria disponible"<<endl;
-            exit(2);
-        }
-        */
 
         TABLERO *p_tablero;
         p_tablero= new TABLERO;
@@ -918,7 +820,6 @@ int main() {
         for(m = 0; m < 64; m++ )
         {
 	        (p_tablero)->posicion_lista(m);
-	        //posicion_lista(m);
         }
 
 
@@ -953,13 +854,11 @@ int main() {
         //Este ciclo toma el vector tablero y a cada espacio que tiene le asigna un carácter ' '.
         for(i=0;i<64;i++){
             ((p_tablero)->casillaDelTablero(i)) -> nombre = ' ';
-            //casillaDelTablero(i) -> nombre = ' ';
         }
 
         turno=turno+1;                         //Suma 1 a la variable turno
         c1=dado(c1,turno,Pc1);                  //toma un numero de1 1 al 64 mediante la función dado() y la asigna al jugador 1
         ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
-        //casillaDelTablero( c1 - 1 ) -> nombre  = 'G'; //Toma la posición actual del jugador 1 y le asigna la letra G a esa posicion en el vector tablero
         (p_Gawain)->set_casilla(c1);
 
 
@@ -973,10 +872,17 @@ int main() {
             c2++;
         }
         ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'D';
-        //casillaDelTablero( c2 - 1 ) -> nombre = 'D';//Toma la posición actual del jugador 2 y le asigna la letra G a esa posicion en el vector tablero
         (p_Dietrich)->set_casilla(c2);
 
+        //Imprime el tablero y un mensaje indicando como avanzar en el juego
         print_table(c1,c2,turno, p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasD);
+        textout(screen,font,"Tire el dado o termine el",210,430,pallete_color[15]);
+        textout(screen,font,"turno presionando la",210,440,pallete_color[15]);
+        textout(screen,font,"flecha arriba",210,450,pallete_color[15]);
+        textout(screen,font,"Presione la flecha arriba",210,480,pallete_color[15]);
+        textout(screen,font,"para continuar",210,490,pallete_color[15]);
+        pass();
+        rectfill(screen,210,430,410,500,pallete_color[16]);
         textout(screen,font,"Tire el dado",210,430,pallete_color[15]);
         textout(screen,font,"DADO: ",210,450,pallete_color[15]);
         pass();
@@ -1002,29 +908,21 @@ int main() {
                     if(contador>8){                 //Si el contador suma 8 errores ejecuta las siguientes tres líneas
                         win=true;                       //Indica que alguien gano
                         flag=true;                      //termina el turno
-                        (p_Dietrich)->winner();
-                        //winner=2;                       //Indica que el jugador 2 gano
+                        (p_Dietrich)->winner();                //Indica que el jugador 2 gano
                     }
                     x=posicion(c1,Pc1);             //Haya la posible nueva posición del jugador 1
                     if(x<65){                       //Si la posible nueva posición es menor a 65 continua con el código
                         Valida=validapos(c1,Pc1,x);     //Valida la nueva posible posición a ver si se puede hacer
                         if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                             if(x!=c2){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 2, continua con el código
-                                if(((p_tablero)->casillaDelTablero(x-1)) -> nombre == ' '){
-                                //if(( casillaDelTablero( x - 1 ) ) -> nombre == ' ' ){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                                    ((p_tablero)->casillaDelTablero(c1-1))-> nombre = 'X';
-                                    //( casillaDelTablero( c1 - 1 ) ) -> nombre = 'X';             //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
-                                    c1=x;                           //Asigna el valor de la posible nueva posición a la posición actual
+                                if(((p_tablero)->casillaDelTablero(x-1)) -> nombre == ' '){         //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
+                                    ((p_tablero)->casillaDelTablero(c1-1))-> nombre = 'X';          //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                                    c1=x;                                                           //Asigna el valor de la posible nueva posición a la posición actual
                                     ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
-                                    //( casillaDelTablero( c1 - 1 ) ) -> nombre ='G';
-                                    (p_Gawain)->set_casilla(c1);
-                                    //(p_Gawain)->casilla=c1;              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
-                                    flag=true;                      //termina el turno
-                                    ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada =Pc1;
-                                    //(casillaJugadasG(jugadaG-1)) -> jugada = Pc1;
-                                    //(p_jugadasG + (jugadaG-1)) -> jugada =Pc1;
-                                    //(p_Gawain)->jugadas[jugadaG-1]=Pc1;           //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
-                                    textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
+                                    (p_Gawain)->set_casilla(c1);                                    //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
+                                    flag=true;                                                      //termina el turno
+                                    ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada =Pc1;      //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
+                                    textout(screen,font,"Termine el turno",210,430,pallete_color[15]);  //Imprime que acabe el turno
                                     textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                                 }
                                 else{                           //Si al evaluar la posible nueva posición en el vector tablero NO corresponde al caracter ' ', vuelve a tirar el dado
@@ -1032,22 +930,14 @@ int main() {
                                 }
                             }
                             else{                               //Si el jugador 1 cae en la posicion del jugador 2
-                                ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'X';
-                                //( casillaDelTablero( c1 - 1 ) ) -> nombre = 'X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
-                                c1=x;                           //Asigna el valor de laposible nueva posición a la posición actual
+                                ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'X';              //Toma la posición actual del jugador 1 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                                c1=x;                                                                //Asigna el valor de laposible nueva posición a la posición actual
                                 (p_Gawain)->set_casilla(c1);
-                                //(p_Gawain)->casilla=c1;
-                                ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';
-                                //( casillaDelTablero( c1 - 1 ) ) -> nombre  = 'G';//Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
-                                flag=true;                      //termina el turno
-                                //(p_Gawain)->jugadas[jugadaG-1]=Pc1;
-                                ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada = Pc1;
-                                //(casillaJugadasG(jugadaG-1))->jugada=Pc1;
-                                //(p_jugadasG + (jugadaG - 1)) -> jugada = Pc1;        //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
-                                win=true;                       //Indica que alguien gano
-                                (p_Gawain)->winner();
-                                //(p_Gawain)->estado=1;
-                                //winner=1;                       //Indica que el jugador 1 gano
+                                ((p_tablero)->casillaDelTablero(c1-1)) -> nombre = 'G';              //Toma la nueva posición actual del jugador 1 en el vector tablero y le asigna el carácter 'G'. Que en el tablero indica la posición de Gowin
+                                flag=true;                                                           //termina el turno
+                                ((p_jugadasG)->casillaDelTablero(jugadaG-1))->jugada = Pc1;          //Agrega al vector jugadas el número de dado que saco el jugador 1 para moverse a la nueva posición
+                                win=true;                                                            //Indica que alguien gano
+                                (p_Gawain)->winner();                                                //Indica que el jugador 1 gano
                                 textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
                                 textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                             }
@@ -1082,20 +972,13 @@ int main() {
                         Valida=validapos(c2,Pc2,x); //Valida la nueva posible posición a ver si se puede hacer
                         if (Valida==1){                 //Si la posible nueva posición es válida continua con el código
                             if(x!=c1){                      //Si la nueva posible posición es diferente al de la posición actual del jugador 1, continua con el código
-                                if(((p_tablero)->casillaDelTablero(x-1))-> nombre == ' '){
-                                //if((casillaDelTablero( x - 1 ) ) -> nombre  == ' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
-                                    ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'X';
-                                    //( casillaDelTablero( c2 - 1 ) ) -> nombre  = 'X';             //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
-                                    c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
+                                if(((p_tablero)->casillaDelTablero(x-1))-> nombre == ' '){          //Si al evaluar la posible nueva posición en el vector tablero corresponde al carácter ' ', continua con el código
+                                    ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'X';         //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                                    c2=x;                                                           //Asigna el valor de la posible nueva posición a la posición actual
                                     (p_Dietrich)->set_casilla(c2);
-                                    //(p_Dietrich)->casilla=c2;
                                     ((p_tablero)->casillaDelTablero(c2-1))-> nombre = 'D';
-                                    //( casillaDelTablero( c2 - 1 ) ) -> nombre  = 'D';
                                     flag=true;                      //termina el turno
-                                    ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada=Pc2;
-                                    //(casillaJugadasD(jugadaD-1))->jugada=Pc2;
-                                    //(p_Dietrich)->jugadas[jugadaD-1]=Pc2;
-                                    //(p_jugadasD + (jugadaD-1)) -> jugada =Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
+                                    ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada=Pc2;       //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
                                     textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
                                     textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                                 }
@@ -1104,23 +987,14 @@ int main() {
                                 }
                             }
                             else{                           //Si el jugador 2 cae en la posicion del jugador 1
-                                ((p_tablero)->casillaDelTablero(c2-1))->nombre = 'X';
-                                //( casillaDelTablero( c2 - 1) ) -> nombre = 'X';              //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
-                                c2=x;                           //Asigna el valor de la posible nueva posición a la posición actual
+                                ((p_tablero)->casillaDelTablero(c2-1))->nombre = 'X';       //Toma la posición actual del jugador 2 en el vector tablero y le asigna el carácter 'X'. Que en el tablero indicara que no se pueden mover a ese sitio
+                                c2=x;                                                       //Asigna el valor de la posible nueva posición a la posición actual
                                 (p_Dietrich)->set_casilla(c2);
-                                //(p_Dietrich)->casilla=c2;
-
                                 ((p_tablero)->casillaDelTablero(c2-1)) -> nombre = 'D';
-                                //( casillaDelTablero( c2 - 1 ) ) -> nombre = 'D';
-                                flag=true;                      //termina el turno
-                                ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada = Pc2;
-                                //(casillaJugadasD(jugadaD-1))->jugada=Pc2;
-                                //(p_Dietrich)->jugadas[jugadaD-1]=Pc2;
-                                //(p_jugadasD + (jugadaD-1)) -> jugada =Pc2;           //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
-                                win=true;                       //Indica que alguien gano
-                                (p_Dietrich)->winner();
-                                //(p_Dietrich)->estado=1;
-                                //winner=2;                       //Indica que el jugador 2 gano
+                                flag=true;                                                   //termina el turno
+                                ((p_jugadasD)->casillaDelTablero(jugadaD-1))->jugada = Pc2;  //Agrega al vector jugadas el número de dado que saco el jugador 2 para moverse a la nueva posición
+                                win=true;                                                    //Indica que alguien gano
+                                (p_Dietrich)->winner();                                      //Indica que el jugador 2 gano
                                 textout(screen,font,"Termine el turno",210,430,pallete_color[15]);
                                 textout(screen,font,"DADO: ",210,450,pallete_color[15]);
                             }
@@ -1139,6 +1013,8 @@ int main() {
             flag=false;                             //Asigna false a la variable flat para que el turno se pueda ejecutar correctamente el código del siguiente jugador
             print_dado(Pc1,Pc2,turno);
             pass();
+
+            //Imprime ell bloque de instrucciones del siguiente jugador luego de limpiar los datos del jugador actual
             rectfill(screen,210,410,410,530,pallete_color[16]);
             print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasD);
             rectfill(screen,210,430,400,440,pallete_color[16]);
@@ -1146,50 +1022,39 @@ int main() {
             pass();
             }
 
+        //Limpia los datos en pantalla
         print_table(c1,c2,turno,p_Gawain,p_Dietrich,jugadaG,jugadaD, p_tablero, p_jugadasG, p_jugadasG);
         rectfill(screen,210,410,410,500,pallete_color[16]);
 
-
+        //Creacion de BITMAP's para la impresion de mensaje del ganador,
+        //es decir, accede las imagenes de los mensajes de ganador
         BITMAP *winner1 = load_bitmap("winner1.bmp",NULL);
         BITMAP *winner2 = load_bitmap("winner2.bmp",NULL);
 
         //5. GANADOR:
 
+        //Si gano el jugador 1, imprime un mensaje diciendo que gano
         if( ((p_Gawain)->get_estado())==1){
             rectfill(screen,423,0,800,550,pallete_color[16]);
 
             blit(winner1,screen,0,0,20,420,370,100);
 
-        }else if( ((p_Dietrich)->get_estado())==1){
+        }
+        //Si gano el jugador 2, imprime un mensaje diciendo que gano
+        else if( ((p_Dietrich)->get_estado())==1){
             blit(winner2,screen,0,0,20,420,370,100);
 
 
         }
-/*
-        if (winner==1){
-            rectfill(screen,423,0,800,550,pallete_color[16]);
-            blit(winner1,screen,0,0,425,0,370,100);
-            blit(caballero1,screen,0,0,470,101,260,310);
-            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
-        }
-        else if(winner==2){
-            rectfill(screen,423,0,800,550,pallete_color[16]);
-            blit(winner2,screen,0,0,425,0,370,100);
-            blit(caballero2,screen,0,0,470,101,260,310);
-            textout(screen,font,"Pulse la flecha arriba para terminar",470,450,pallete_color[15]);
-        }
-*/
-        pass();//Función que para el juego hasta que se oprima la flecha arriba
 
+        pass(); //Función que para el juego hasta que se oprima la flecha arriba
 
-        //delete(p_jugadasD);
-        //delete(p_jugadasG);
-        deinit();
+        deinit();   //Termina la ejecucion de la interfaz grafica
         return 0;
     }
 
-    else{
-        deinit();
+    else{   //Si se eligio la opcion salir en el menu
+        deinit();   //Termina la ejecucion de la interfaz grafica
         return 0;
     }
 
@@ -1198,8 +1063,12 @@ END_OF_MAIN();
 
 
 
+//--------------------------------------------
+
+
 
 //GRAFICOS
+
 void init(){
     int depth, res;
     allegro_init();
